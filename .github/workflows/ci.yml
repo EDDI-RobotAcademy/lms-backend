@@ -40,7 +40,7 @@ jobs:
           ${{ runner.os }}-pip-
 
     - name: Install dependencies
-      working-directory: ./TransFarmers
+      working-directory: ./lms_project
       run: |
         if [ -f requirements.txt ]; then
           python -m venv .venv
