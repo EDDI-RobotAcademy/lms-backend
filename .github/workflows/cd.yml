@@ -5,7 +5,7 @@ on:
     types: [BACKEND_TEST_FINISH_TRIGGER]
 
 env:
-  DOCKER_IMAGE: ${{ secrets.REAL_ACTOR }}/lms-backend
+  DOCKER_IMAGE: ghcr.io/${{ secrets.REAL_ACTOR }}/lms-backend
 jobs:
   build:
     name: build-app
@@ -65,7 +65,7 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         cd lms_project
-        docker buildx build --platform linux/arm64 -f Dockerfile -t ghcr.io/${{ env.DOCKER_IMAGE }}/lms-django-backend-server:latest --push .
+        docker buildx build --platform linux/arm64 -f Dockerfile -t ${{ env.DOCKER_IMAGE}}:latest --push .
   
   deploy:
     needs: build
