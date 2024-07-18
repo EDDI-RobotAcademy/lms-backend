@@ -2,11 +2,11 @@ FROM python:3.10
 
 WORKDIR /app
 
-RUN apt-get upadate && apt-get install -y \
-    build-essential \
-    default-libmysqlclient-dev \
-    pkg-config \
-    && rm -rf /var/lib/apt/lsts/* \
+# RUN apt-get upadate && apt-get install -y \
+#     build-essential \
+#     default-libmysqlclient-dev \
+#     pkg-config \
+#     && rm -rf /var/lib/apt/lsts/* \
 
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
