@@ -5,7 +5,7 @@ on:
     types: [BACKEND_TEST_FINISH_TRIGGER]
     
 env:
-  DOCKER_IMAGE: ghcr.io/${{ secrets.REAL_ACTOR }}/lms-backend
+  DOCKER_IMAGE: ghcr.io/${{ secrets.REAL_ACTOR }}/lms-django-backend-server
 
 jobs:
   build:
