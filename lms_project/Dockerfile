@@ -3,9 +3,9 @@ FROM python:3.10
 WORKDIR /app
 
 RUN apt-get upadate && apt-get install -y \
-    build-essential
+    build-essential \
     default-libmysqlclient-dev \
-    pkg-config
+    pkg-config \
     && rm -rf /var/lib/apt/lsts/* \
 
 COPY requirements.txt /app/
