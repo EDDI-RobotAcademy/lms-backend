@@ -3,6 +3,9 @@ name: Django CD (Continuous Deploy)
 on:
   repository_dispatch:
     types: [BACKEND_TEST_FINISH_TRIGGER]
+    
+env:
+  DOCKER_IMAGE: ghcr.io/${{ secrets.REAL_ACTOR }}/lms-backend
 
 jobs:
   build:
@@ -63,8 +66,7 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         cd lms_project
-        docker buildx build --platform linux/arm64 -f Dockerfile -t ghcr.io/${{ github.actor }}/django-backend-server:latest --push .
-
+        docker buildx build --platform linux/arm64 -f Dockerfile -t ${{ env.DOCKER_IMAGE}}:latest --push .
   deploy:
     needs: build
     name: Deploy
