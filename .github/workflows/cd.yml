@@ -90,8 +90,8 @@ jobs:
             cd /home/ec2-user/lms/django-backend
             docker-compose down
 
-            echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ghcr.io/${{ github.actor }}/:latest
+            echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.REAL_ACTOR }} --password-stdin
+            docker pull ghcr.io/${{ secrets.REAL_ACTOR }}/:latest
 
             docker image prune -f
             docker logout
