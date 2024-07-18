@@ -94,7 +94,7 @@ jobs:
             docker-compose down
 
             echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.REAL_ACTOR }} --password-stdin
-            docker pull ${{ secrets.REAL_ACTOR }}/:latest
+            docker pull ${{ env.DOCKER_IMAGE }}/:latest
 
             docker image prune -f
             docker logout
