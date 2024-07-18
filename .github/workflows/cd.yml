@@ -68,7 +68,7 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        cd lms-backend
+        cd lms_project
         docker buildx build --platform linux/arm64 -f Dockerfile -t ${{ env.DOCKER_IMAGE}}:latest --push .
   deploy:
     needs: build
