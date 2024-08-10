@@ -21,3 +21,6 @@ class AccountServiceImpl(AccountService):
     def checkEmailDuplication(self, email):
         profile = self.__profileRepository.findByEmail(email)
         return profile is not None
+
+    def registerAccount(self, email, password):
+        return self.__profileRepository.create(email, password)
