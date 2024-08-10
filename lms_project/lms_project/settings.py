@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'board',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
 
 import os
 from dotenv import load_dotenv
+
 
 load_dotenv()
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
