@@ -27,3 +27,10 @@ class ProfileRepositoryImpl(ProfileRepository):
         except Exception as e:
             print(f"email 검사 중 에러: {e}")
             return None
+
+    def create(self, email, password):
+        profile = Profile.objects.create(
+            email=email,
+            password=password,
+        )
+        return profile
