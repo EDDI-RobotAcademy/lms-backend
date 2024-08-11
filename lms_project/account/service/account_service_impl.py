@@ -24,3 +24,6 @@ class AccountServiceImpl(AccountService):
 
     def registerAccount(self, email, password):
         return self.__profileRepository.create(email, password)
+
+    def decryptionPassword(self, email, password):
+        return self.__profileRepository.decryption(email, password)

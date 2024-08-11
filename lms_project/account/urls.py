@@ -11,4 +11,5 @@ urlpatterns = [
          AccountView.as_view({'post': 'checkEmailDuplication'}),
          name='account-email-duplication-check'),
     path('register', AccountView.as_view({'post': 'registerAccount'}), name='register-account'),
+    path('login', AccountView.as_view({'post': 'loginAccount'}), name='login-account'),
 ]

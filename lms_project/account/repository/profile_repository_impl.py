@@ -1,5 +1,13 @@
+from datetime import datetime, timedelta
+
+import bcrypt
+import jwt
+
+import account
 from account.entity.profile import Profile
 from account.repository.profile_repository import ProfileRepository
+from lms_project import settings
+
 
 class ProfileRepositoryImpl(ProfileRepository):
     __instance = None
@@ -34,3 +42,25 @@ class ProfileRepositoryImpl(ProfileRepository):
             password=password,
         )
         return profile
+
+    def decryption(self, email, password):
+        try:
+            account = Profile.objects.filter(email=email).first()
+
+            if account is None:
+                return None
+
+            if bcrypt.checkpw(password.encode("utf-8"), account.password.encode("utf-8")):
+                payload = {
+                    'id': account.id,
+                    'email': email,
+                    'exp': datetime.utcnow() + timedelta(hours=24)
+                }
+                access_token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+                return access_token
+            else:
+                return None
+
+        except Exception as e:
+            print(f"decryption 중 에러 발생: {e}")
+            return None
