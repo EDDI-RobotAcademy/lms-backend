@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'board',
     'account',
+    'google_oauth',
 ]
 
 MIDDLEWARE = [
