@@ -9,3 +9,7 @@ class ProfileRepository(ABC):
     @abstractmethod
     def create(self, email, password):
         pass
+
+    @abstractmethod
+    def decryption(self, email, password):
+        pass

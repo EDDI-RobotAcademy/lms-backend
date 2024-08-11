@@ -55,8 +55,8 @@ MIDDLEWARE = [
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
+SECRET_KEY = os.getenv('SECRET_KEY')
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
