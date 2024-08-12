@@ -20,4 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('board/', include('board.urls')),
+    path('account/', include('account.urls')),
+    path('google_oauth/', include('google_oauth.urls')),
 ]
