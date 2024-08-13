@@ -146,30 +146,6 @@ def remove_stopwords(df):
     print(df.head())
     print(df.info())
     return df
-# 만약 1인분 레시피만 뽑을 거면 아래 함수는 버리면 됩니다. 그리고 CKG_INBUN_NM==1인 df만 apply lambda x 써서 필터링하면 될듯
-# def adjust_for_servings(text, current_servings, target_servings=2):
-#     def replace_match(match):
-#         value = match.group(0)
-#         if '/' in value:
-#             numerator, denominator = map(int, value.split('/'))
-#             result = numerator / denominator
-#         elif '+' in value:
-#             parts = value.split('+')
-#             result = sum(float(part) for part in parts)
-#         elif '.' in value:
-#             result = float(value)
-#         else:
-#             result = float(value)
-#
-#         adjusted_result = result * (target_servings / current_servings)
-#
-#         return str(int(adjusted_result)) if adjusted_result % 1 == 0 else str(adjusted_result)
-#
-#     return re.sub(r'\d+/\d+|\d+\.\d+|\d+(\+\d+)?', replace_match, text)
-#
-# def adjust_servings_in_dataframe(df):
-#     df['CKG_MTRL_CN'] = df.apply(lambda row: adjust_for_servings(row['CKG_MTRL_CN'], row['CKG_INBUN_NM']), axis=1)
-#     return df
 
 def preprocess_data(path):
     df = load_data(path)
@@ -189,7 +165,7 @@ def preprocess_data(path):
 if __name__ =='__main__':
     file_paths = ['TB_RECIPE_SEARCH-220701.csv', 'TB_RECIPE_SEARCH-20231130.csv']
     file_path = os.path.join('data', file_paths[0])
-    result = get_pickle_data(file_path, 1)
+    result = get_pickle_data(file_path, 30000) # 크롤링 데이터 개수
 
     # preprocess
     preprocess_data(result)
