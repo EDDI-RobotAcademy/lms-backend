@@ -78,5 +78,5 @@ def delete_recipes_without_ingredients():
 
 if __name__ == '__main__':
     df = pd.read_pickle('data_encoding_processing/result/preprocessed_df_28703.pkl')
-    # insert_data_from_dataframe(df)
+    insert_data_from_dataframe(df)
     delete_recipes_without_ingredients()
