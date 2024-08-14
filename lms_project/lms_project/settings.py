@@ -23,7 +23,6 @@ SECRET_KEY = 'django-insecure-ok-sdb8b9v13ez@qm)2&kt$ef$t+xo#*%#c9c6opsax=t0rz47
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 
@@ -57,6 +56,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+ALLOWED_HOSTS = [ALLOWED_HOST for ALLOWED_HOST in os.getenv('ALLOWED_HOSTS', '').split(',')]
 SECRET_KEY = os.getenv('SECRET_KEY')
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
