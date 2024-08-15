@@ -11,5 +11,13 @@ class ProfileRepository(ABC):
         pass
 
     @abstractmethod
+    def createSocial(self, email):
+        pass
+
+    @abstractmethod
     def decryption(self, email, password):
+        pass
+
+    @abstractmethod
+    def findByLoginType(self, email):
         pass
