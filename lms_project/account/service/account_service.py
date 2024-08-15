@@ -22,3 +22,7 @@ class AccountService(ABC):
     @abstractmethod
     def checkLoginType(self, email):
         pass
+
+    @abstractmethod
+    def findAccountByEmail(self, email):
+        pass

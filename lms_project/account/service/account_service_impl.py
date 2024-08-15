@@ -38,3 +38,9 @@ class AccountServiceImpl(AccountService):
     def checkLoginType(self, email):
         loginType = self.__profileRepository.findByLoginType(email)
         return loginType
+
+    def findAccountByEmail(self, email):
+        profile = self.__profileRepository.findByEmail(email)
+
+        return profile
+
