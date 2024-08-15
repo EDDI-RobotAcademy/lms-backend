@@ -18,8 +18,9 @@ class GoogleOauthView(viewsets.ViewSet):
             userInfo = self.googleOauthService.googleTokenDecoding(tokenInfo)
 
             return Response({
-                'email': userInfo['email'],
+                'sub': userInfo['sub'],
                 'name': userInfo['name'],
+                'email': userInfo['email'],
             }, status=200)
         except Exception as e:
             print("토큰 인코딩 오류 발생:", e)

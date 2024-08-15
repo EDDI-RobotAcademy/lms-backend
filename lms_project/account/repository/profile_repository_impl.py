@@ -4,6 +4,7 @@ import bcrypt
 import jwt
 
 import account
+from account.entity.account_login_type import AccountLoginType
 from account.entity.profile import Profile
 from account.repository.profile_repository import ProfileRepository
 from lms_project import settings
@@ -43,6 +44,13 @@ class ProfileRepositoryImpl(ProfileRepository):
         )
         return profile
 
+    def createSocial(self, email):
+        profile = Profile.objects.create(
+            email=email,
+            password="N/A",
+        )
+        return profile
+
     def decryption(self, email, password):
         try:
             account = Profile.objects.filter(email=email).first()
@@ -64,3 +72,18 @@ class ProfileRepositoryImpl(ProfileRepository):
         except Exception as e:
             print(f"decryption 중 에러 발생: {e}")
             return None
+
+    def findByLoginType(self, email):
+        try:
+            profile = Profile.objects.get(email=email)
+            login_type = AccountLoginType.objects.get(id=profile.id)
+            print("로그인의 로그인 타입",login_type.loginType)
+            return login_type.loginType
+        except Profile.DoesNotExist:
+            print(f"email 찾을 수 없음: {email}")
+            return None
+        except Exception as e:
+            print(f"email 검사 중 에러: {e}")
+            return None
+        pass
+
