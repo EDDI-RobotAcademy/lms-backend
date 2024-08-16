@@ -41,6 +41,7 @@ class AccountView(viewsets.ViewSet):
 
             account = self.accountService.registerAccount(
                 loginType="NORMAL",
+                paidmemberType="0",
                 email=email,
                 password=hashed_password,
             )
@@ -57,6 +58,7 @@ class AccountView(viewsets.ViewSet):
 
             account = self.accountService.registerSocialAccount(
                 loginType="GOOGLE",
+                paidmemberType=0,
                 email=email,
             )
 
@@ -93,6 +95,22 @@ class AccountView(viewsets.ViewSet):
             return Response(
                 {
                     "isLoginType": isLoginType
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print("이메일 중복 체크 중 에러 발생:", e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def checkPaidMemberType(self, request):
+        print("checkPaidMemberType()")
+        try:
+            email = request.data.get("email")
+            isPaidMemberType = self.accountService.checkPaidMemberType(email)
+            print("isPaidMemberType", isPaidMemberType)
+            return Response(
+                {
+                    "isPaidMemberType": isPaidMemberType
                 },
                 status=status.HTTP_200_OK,
             )

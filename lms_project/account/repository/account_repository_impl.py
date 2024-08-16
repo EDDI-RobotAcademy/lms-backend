@@ -1,5 +1,7 @@
 from account.entity.account import Account
 from account.entity.account_login_type import AccountLoginType
+from account.entity.account_paid_member_type import AccountPaidMemberType
+from account.entity.profile import Profile
 from account.repository.account_repository import AccountRepository
 
 class AccountRepositoryImpl(AccountRepository):
@@ -18,8 +20,14 @@ class AccountRepositoryImpl(AccountRepository):
 
         return cls.__instance
 
-    def create(self, loginType):
+    def create(self, paidmemberType, loginType):
         loginTypeEntity = AccountLoginType.objects.create(loginType=loginType)
 
-        account = Account.objects.create(loginType=loginTypeEntity)
+        paidmemberTypeEntity = AccountPaidMemberType.objects.create(paidmemberType=paidmemberType)
+
+        account = Account.objects.create(
+            loginType=loginTypeEntity,
+            paidmemberType=paidmemberTypeEntity
+        )
+
         return account
