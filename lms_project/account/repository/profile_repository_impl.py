@@ -97,9 +97,3 @@ class ProfileRepositoryImpl(ProfileRepository):
         print("findByEmail 출력",email.email)
         return email.email
 
-    def findPaidMemberType(self, accountId):
-        account = AccountPaidMemberType.objects.get(id=accountId)
-        paidmemberType = AccountPaidMemberType.objects.get(paidmemberType=account.paidmemberType)
-        print("findPaidMemberType 출력",paidmemberType.paidmemberType)
-        return paidmemberType.paidmemberType
-

@@ -43,14 +43,10 @@ class AccountServiceImpl(AccountService):
 
         return profile
 
-    def checkPaidMemberType(self, email):
-        paidMemberType = self.__profileRepository.findByPaidMemberType(email)
-        return paidMemberType
-
     def findEmailByAccountId(self, accountId):
         email = self.__profileRepository.findByEmail(accountId)
         return email
 
     def findPaidMemberTypeByAccountId(self, accountId):
-        paidmembertype = self.__profileRepository.findPaidMemberType(accountId)
+        paidmembertype = self.__accountRepository.findPaidMemberType(accountId)
         return paidmembertype
