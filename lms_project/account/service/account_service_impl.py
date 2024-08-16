@@ -24,13 +24,12 @@ class AccountServiceImpl(AccountService):
         profile = self.__profileRepository.findByEmail(email)
         return profile is not None
 
-    def registerAccount(self, loginType, email, password):
-        account = self.__accountRepository.create(loginType)
+    def registerAccount(self, paidmemberType, loginType, email, password):
         return self.__profileRepository.create(email, password)
 
-    def registerSocialAccount(self,loginType, email):
-        account = self.__accountRepository.create(loginType)
-        return self.__profileRepository.createSocial(email)
+    def registerSocialAccount(self, paidmemberType, loginType, email):
+        account = self.__accountRepository.create(paidmemberType, loginType)
+        return self.__profileRepository.createSocial(email, account)
 
     def decryptionPassword(self, email, password):
         return self.__profileRepository.decryption(email, password)
@@ -44,3 +43,14 @@ class AccountServiceImpl(AccountService):
 
         return profile
 
+    def checkPaidMemberType(self, email):
+        paidMemberType = self.__profileRepository.findByPaidMemberType(email)
+        return paidMemberType
+
+    def findEmailByAccountId(self, accountId):
+        email = self.__profileRepository.findByEmail(accountId)
+        return email
+
+    def findPaidMemberTypeByAccountId(self, accountId):
+        paidmembertype = self.__profileRepository.findPaidMemberType(accountId)
+        return paidmembertype

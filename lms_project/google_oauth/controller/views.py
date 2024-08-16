@@ -50,7 +50,31 @@ class GoogleOauthView(viewsets.ViewSet):
             accountId = self.redisService.getValueByKey(userToken)
             print(f"accountId: {accountId}")
 
-            return Response({ 'userToken': userToken }, status=status.HTTP_200_OK)
+            return Response({'userToken': userToken}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print('Error storing access token in Redis:', e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getUserTokenEmailInfo(self, request):
+        try:
+            userToken = request.data.get('usertoken')
+            accountId = self.redisService.getValueByKey(userToken)
+            print(f"accountId: {accountId}")
+            EmailInfo = self.accountService.findEmailByAccountId(accountId)
+
+            return Response({'EmailInfo': EmailInfo}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print('Error storing access token in Redis:', e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getUserTokenPaidMemberTypeInfo(self, request):
+        try:
+            userToken = request.data.get('usertoken')
+            accountId = self.redisService.getValueByKey(userToken)
+            print(f"accountId: {accountId}")
+            PaidMemberTypeInfo = self.accountService.findPaidMemberTypeByAccountId(accountId)
+
+            return Response({'PaidMemberTypeInfo': PaidMemberTypeInfo}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error storing access token in Redis:', e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
