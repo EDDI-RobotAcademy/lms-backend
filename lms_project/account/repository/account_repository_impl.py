@@ -31,3 +31,9 @@ class AccountRepositoryImpl(AccountRepository):
         )
 
         return account
+
+    def findPaidMemberType(self, accountId):
+        account = AccountPaidMemberType.objects.get(id=accountId)
+        paidmemberType = AccountPaidMemberType.objects.get(paidmemberType=account.paidmemberType)
+        print("findPaidMemberType 출력",paidmemberType.paidmemberType)
+        return paidmemberType.paidmemberType

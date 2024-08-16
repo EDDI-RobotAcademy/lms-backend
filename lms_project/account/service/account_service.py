@@ -28,10 +28,6 @@ class AccountService(ABC):
         pass
 
     @abstractmethod
-    def checkPaidMemberType(self, email):
-        pass
-
-    @abstractmethod
     def findEmailByAccountId(self, accountId):
         pass
 

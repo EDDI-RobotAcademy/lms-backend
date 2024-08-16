@@ -25,7 +25,3 @@ class ProfileRepository(ABC):
     @abstractmethod
     def findByEmail(self, accountId):
         pass
-
-    @abstractmethod
-    def findPaidMemberType(self, accountId):
-        pass
