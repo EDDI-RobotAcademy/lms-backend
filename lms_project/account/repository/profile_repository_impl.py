@@ -90,10 +90,3 @@ class ProfileRepositoryImpl(ProfileRepository):
             print(f"email 검사 중 에러: {e}")
             return None
         pass
-
-    def findByEmail(self, accountId):
-        profile = Profile.objects.get(id=accountId)
-        email = Profile.objects.get(email=profile.email)
-        print("findByEmail 출력",email.email)
-        return email.email
-
