@@ -10,5 +10,6 @@ urlpatterns = [
     path('login', GoogleOauthView.as_view({'post': 'GoogleLoginToken'}), name='google-login'),
     path('redis-access-token', GoogleOauthView.as_view({'post': 'redisAccessToken'}), name='redis-access-token'),
     path('redis-get-email', GoogleOauthView.as_view({'post': 'getUserTokenEmailInfo'}), name='redis-get-value'),
-    path('redis-get-paidmembertype', GoogleOauthView.as_view({'post': 'getUserTokenPaidMemberTypeInfo'}), name='redis-get-paidmembertype'),
+    path('redis-get-paid-member-type', GoogleOauthView.as_view({'post': 'getUserTokenPaidMemberTypeInfo'}), name='redis-get-paid-member-type'),
+    path('redis-get-ticket', GoogleOauthView.as_view({'post': 'getUserTicketInfo'}), name='redis-get-ticket'),
 ]
