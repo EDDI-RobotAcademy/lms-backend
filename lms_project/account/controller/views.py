@@ -40,8 +40,26 @@ class AccountView(viewsets.ViewSet):
             hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
             account = self.accountService.registerAccount(
+                loginType="NORMAL",
+                paidmemberType="0",
                 email=email,
                 password=hashed_password,
+            )
+
+            serializer = ProfileSerializer(account)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print("계정 생성 중 에러 발생:", e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def registerSocialAccount(self, request):
+        try:
+            email = request.data.get("email")
+
+            account = self.accountService.registerSocialAccount(
+                loginType="GOOGLE",
+                paidmemberType=0,
+                email=email,
             )
 
             serializer = ProfileSerializer(account)
@@ -66,3 +84,20 @@ class AccountView(viewsets.ViewSet):
         except Exception as e:
             print("로그인 중 에러 발생:", e)
             return Response({"error": "로그인 중 오류 발생"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def checkLoginType(self, request):
+        print("checkLoginType()")
+        try:
+            email = request.data.get("email")
+            isLoginType = self.accountService.checkLoginType(email)
+            print("isLoginType", isLoginType)
+            return Response(
+                {
+                    "isLoginType": isLoginType
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print("이메일 중복 체크 중 에러 발생:", e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
