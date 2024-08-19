@@ -24,8 +24,8 @@ class AccountServiceImpl(AccountService):
         profile = self.__profileRepository.findByEmail(email)
         return profile is not None
 
-    def registerAccount(self, paidmemberType, loginType, email, password):
-        account = self.__accountRepository.create(paidmemberType, loginType)
+    def registerAccount(self, Ticket, paidmemberType, loginType, email, password):
+        account = self.__accountRepository.create(Ticket, paidmemberType, loginType)
         return self.__profileRepository.create(email, password, account)
 
     def registerSocialAccount(self, paidmemberType, loginType, email):
@@ -51,3 +51,7 @@ class AccountServiceImpl(AccountService):
     def findPaidMemberTypeByAccountId(self, accountId):
         paidmembertype = self.__accountRepository.findPaidMemberType(accountId)
         return paidmembertype
+
+    def findTicketByAccountId(self, accountId):
+        ticket = self.__accountRepository.findTicket(accountId)
+        pass

@@ -42,6 +42,7 @@ class AccountView(viewsets.ViewSet):
             account = self.accountService.registerAccount(
                 loginType="NORMAL",
                 paidmemberType="0",
+                Ticket="99999",
                 email=email,
                 password=hashed_password,
             )
