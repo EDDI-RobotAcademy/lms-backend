@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'board',
     'account',
     'google_oauth',
+    'recipe',
 ]
 
 MIDDLEWARE = [
