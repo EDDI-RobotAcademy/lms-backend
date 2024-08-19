@@ -3,10 +3,7 @@ from datetime import datetime, timedelta
 import bcrypt
 import jwt
 
-import account
-from account.entity.account import Account
 from account.entity.account_login_type import AccountLoginType
-from account.entity.account_paid_member_type import AccountPaidMemberType
 from account.entity.profile import Profile
 from account.repository.profile_repository import ProfileRepository
 from lms_project import settings
@@ -90,3 +87,15 @@ class ProfileRepositoryImpl(ProfileRepository):
             print(f"email 검사 중 에러: {e}")
             return None
         pass
+
+    def findByAccount(self, accountId):
+        try:
+            profile = Profile.objects.get(id=accountId)
+            email = Profile.objects.get(email=profile.id)
+            return email
+        except Profile.DoesNotExist:
+            print(f"accountId 찾을 수 없음: {email}")
+            return None
+        except Exception as e:
+            print(f"accountId 검사 중 에러: {e}")
+            return None
