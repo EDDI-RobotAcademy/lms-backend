@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'board',
+    'account',
+    'google_oauth',
     'recipe',
 ]
 
@@ -56,6 +58,8 @@ MIDDLEWARE = [
 from dotenv import load_dotenv
 
 load_dotenv()
+ALLOWED_HOSTS = [ALLOWED_HOST for ALLOWED_HOST in os.getenv('ALLOWED_HOSTS', '').split(',')]
+SECRET_KEY = os.getenv('SECRET_KEY')
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
