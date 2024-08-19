@@ -43,8 +43,7 @@ class AccountRepositoryImpl(AccountRepository):
         return paidmemberType.paidmemberType
 
     def findTicket(self, accountId):
-        account = AccountPaidMemberType.objects.get(id=accountId)
-        ticket = AccountTicket.objects.get(Ticket=account.Ticket)
-        print("findPaidMemberType 출력", ticket.ticket)
-        return ticket.paidmemberType
-        pass
+        account = AccountTicket.objects.get(id=accountId)
+        print("findTicket 출력", account.Ticket)
+        if account.Ticket:
+            return account.Ticket  # 대문자 T를 사용

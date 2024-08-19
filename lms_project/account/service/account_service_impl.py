@@ -41,7 +41,6 @@ class AccountServiceImpl(AccountService):
 
     def findAccountByEmail(self, email):
         profile = self.__profileRepository.findByEmail(email)
-
         return profile
 
     def findEmailByAccountId(self, accountId):
@@ -54,4 +53,4 @@ class AccountServiceImpl(AccountService):
 
     def findTicketByAccountId(self, accountId):
         ticket = self.__accountRepository.findTicket(accountId)
-        pass
+        return ticket
