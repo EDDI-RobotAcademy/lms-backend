@@ -7,4 +7,5 @@ from board.entity.models import Board
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
-        fields = ['id']
+        fields = ['boardId', 'title', 'writer', 'content', 'regDate', 'updDate']
+        read_only_fields = ['regDate', 'updDate']

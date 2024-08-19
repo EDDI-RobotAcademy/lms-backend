@@ -380,3 +380,5 @@ $RECYCLE.BIN/
 # exclude .idea
 .idea
 *.idea
+*.csv
+*.pkl
