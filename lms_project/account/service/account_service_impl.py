@@ -25,7 +25,8 @@ class AccountServiceImpl(AccountService):
         return profile is not None
 
     def registerAccount(self, paidmemberType, loginType, email, password):
-        return self.__profileRepository.create(email, password)
+        account = self.__accountRepository.create(paidmemberType, loginType)
+        return self.__profileRepository.create(email, password, account)
 
     def registerSocialAccount(self, paidmemberType, loginType, email):
         account = self.__accountRepository.create(paidmemberType, loginType)
@@ -44,7 +45,7 @@ class AccountServiceImpl(AccountService):
         return profile
 
     def findEmailByAccountId(self, accountId):
-        email = self.__profileRepository.findByEmail(accountId)
+        email = self.__profileRepository.findByAccount(accountId)
         return email
 
     def findPaidMemberTypeByAccountId(self, accountId):
