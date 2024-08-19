@@ -21,3 +21,7 @@ class ProfileRepository(ABC):
     @abstractmethod
     def findByLoginType(self, email):
         pass
+
+    @abstractmethod
+    def findByAccount(self, accountId):
+        pass
