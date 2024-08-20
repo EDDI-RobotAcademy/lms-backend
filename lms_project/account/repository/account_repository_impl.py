@@ -1,8 +1,9 @@
 from account.entity.account import Account
 from account.entity.account_login_type import AccountLoginType
 from account.entity.account_paid_member_type import AccountPaidMemberType
-from account.entity.profile import Profile
+from account.entity.account_ticket import AccountTicket
 from account.repository.account_repository import AccountRepository
+
 
 class AccountRepositoryImpl(AccountRepository):
     __instance = None
@@ -20,14 +21,17 @@ class AccountRepositoryImpl(AccountRepository):
 
         return cls.__instance
 
-    def create(self, paidmemberType, loginType):
+    def create(self, Ticket, paidmemberType, loginType):
         loginTypeEntity = AccountLoginType.objects.create(loginType=loginType)
 
         paidmemberTypeEntity = AccountPaidMemberType.objects.create(paidmemberType=paidmemberType)
 
+        ticketEntity = AccountTicket.objects.create(Ticket=Ticket)
+
         account = Account.objects.create(
             loginType=loginTypeEntity,
-            paidmemberType=paidmemberTypeEntity
+            paidmemberType=paidmemberTypeEntity,
+            Ticket=ticketEntity
         )
 
         return account
@@ -35,5 +39,11 @@ class AccountRepositoryImpl(AccountRepository):
     def findPaidMemberType(self, accountId):
         account = AccountPaidMemberType.objects.get(id=accountId)
         paidmemberType = AccountPaidMemberType.objects.get(paidmemberType=account.paidmemberType)
-        print("findPaidMemberType 출력",paidmemberType.paidmemberType)
+        print("findPaidMemberType 출력", paidmemberType.paidmemberType)
         return paidmemberType.paidmemberType
+
+    def findTicket(self, accountId):
+        account = AccountTicket.objects.get(id=accountId)
+        print("findTicket 출력", account.Ticket)
+        if account.Ticket:
+            return account.Ticket  # 대문자 T를 사용

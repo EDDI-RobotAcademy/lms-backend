@@ -45,10 +45,9 @@ class GoogleOauthView(viewsets.ViewSet):
 
             userToken = str(uuid.uuid4())
             print(f"type of account.id: {type(account.id)}")
-            self.redisService.store_access_token(account.id, userToken)
+            ticket = self.accountService.findTicketByAccountId(account.id)
 
-            accountId = self.redisService.getValueByKey(userToken)
-            print(f"accountId: {accountId}")
+            self.redisService.store_access_token(userToken, str(account.id), email, ticket)
 
             return Response({'userToken': userToken}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -58,13 +57,21 @@ class GoogleOauthView(viewsets.ViewSet):
     def getUserTokenEmailInfo(self, request):
         try:
             userToken = request.data.get('usertoken')
-            accountId = self.redisService.getValueByKey(userToken)
-            print(f"accountId: {accountId}")
-            EmailInfo = self.accountService.findEmailByAccountId(accountId)
+            print(f"Searching for token: {userToken}")
+            stored_data = self.redisService.getValueByKey(userToken)
+            print(f"Stored data: {stored_data}")
 
-            return Response({'EmailInfo': EmailInfo}, status=status.HTTP_200_OK)
+            if not stored_data:
+                return Response({'error': 'Token not found'}, status=status.HTTP_404_NOT_FOUND)
+
+            email = stored_data.get('email', '')
+            account_id = stored_data.get('account_id', '')
+
+            print(f"Account ID: {account_id}, Email: {email}")
+
+            return Response({'EmailInfo': email}, status=status.HTTP_200_OK)
         except Exception as e:
-            print('Error storing access token in Redis:', e)
+            print(f'Error retrieving email info: {e}')
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def getUserTokenPaidMemberTypeInfo(self, request):
@@ -77,4 +84,16 @@ class GoogleOauthView(viewsets.ViewSet):
             return Response({'PaidMemberTypeInfo': PaidMemberTypeInfo}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error storing access token in Redis:', e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getUserTicketInfo(self, request):
+        try:
+            userToken = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(userToken)
+            print(f"accountId 입니다: {accountInfo}")
+            ticket = accountInfo['ticket']
+            print("티켓만 출력", ticket)
+            return Response({'ticket': ticket}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print('Error retrieving ticket info:', e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

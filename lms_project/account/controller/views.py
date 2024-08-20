@@ -36,14 +36,17 @@ class AccountView(viewsets.ViewSet):
         try:
             email = request.data.get("email")
             password = request.data.get("password")
+            nickname = request.data.get("nickname")
 
             hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
             account = self.accountService.registerAccount(
                 loginType="NORMAL",
                 paidmemberType="0",
+                Ticket="99999",
                 email=email,
                 password=hashed_password,
+                nickname=nickname,
             )
 
             serializer = ProfileSerializer(account)
@@ -85,7 +88,6 @@ class AccountView(viewsets.ViewSet):
             print("로그인 중 에러 발생:", e)
             return Response({"error": "로그인 중 오류 발생"}, status=status.HTTP_400_BAD_REQUEST)
 
-
     def checkLoginType(self, request):
         print("checkLoginType()")
         try:
@@ -95,6 +97,22 @@ class AccountView(viewsets.ViewSet):
             return Response(
                 {
                     "isLoginType": isLoginType
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print("이메일 중복 체크 중 에러 발생:", e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def checkNickNameDuplication(self, request):
+        print("checkNickNameDuplication()")
+        try:
+            nickname = request.data.get("nickname")
+            isNickNameDuplicate = self.accountService.checkNickNameDuplication(nickname)
+            print("Nickname 이미 존재" if isNickNameDuplicate else "nickname 사용 가능")
+            return Response(
+                {
+                    "isNickNameDuplicate": isNickNameDuplicate
                 },
                 status=status.HTTP_200_OK,
             )
