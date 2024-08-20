@@ -24,9 +24,9 @@ class AccountServiceImpl(AccountService):
         profile = self.__profileRepository.findByEmail(email)
         return profile is not None
 
-    def registerAccount(self, Ticket, paidmemberType, loginType, email, password):
+    def registerAccount(self, Ticket, paidmemberType, loginType, email, password, nickname):
         account = self.__accountRepository.create(Ticket, paidmemberType, loginType)
-        return self.__profileRepository.create(email, password, account)
+        return self.__profileRepository.create(email, password, nickname, account)
 
     def registerSocialAccount(self, paidmemberType, loginType, email):
         account = self.__accountRepository.create(paidmemberType, loginType)
@@ -54,3 +54,7 @@ class AccountServiceImpl(AccountService):
     def findTicketByAccountId(self, accountId):
         ticket = self.__accountRepository.findTicket(accountId)
         return ticket
+
+    def checkNickNameDuplication(self, nickname):
+        nickname = self.__profileRepository.findByNickname(nickname)
+        return nickname is not None

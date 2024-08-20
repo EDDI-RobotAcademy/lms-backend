@@ -36,10 +36,11 @@ class ProfileRepositoryImpl(ProfileRepository):
             print(f"email 검사 중 에러: {e}")
             return None
 
-    def create(self, email, password, account):
+    def create(self, email, password, nickname, account):
         profile = Profile.objects.create(
             email=email,
             password=password,
+            nickname=nickname,
             account=account,
         )
         return profile
@@ -98,4 +99,15 @@ class ProfileRepositoryImpl(ProfileRepository):
             return None
         except Exception as e:
             print(f"accountId 검사 중 에러: {e}")
+            return None
+
+    def findByNickname(self, nickname):
+        try:
+            profile = Profile.objects.get(nickname=nickname)
+            return profile
+        except Profile.DoesNotExist:
+            print(f"email 찾을 수 없음: {nickname}")
+            return None
+        except Exception as e:
+            print(f"email 검사 중 에러: {e}")
             return None
