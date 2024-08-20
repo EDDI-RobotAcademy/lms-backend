@@ -13,3 +13,7 @@ class RedisService(ABC):
     @abstractmethod
     def deleteKey(self, key):
         pass
+
+    @abstractmethod
+    def update_access_token(self, userToken, accountInfo):
+        pass
