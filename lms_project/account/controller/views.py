@@ -44,6 +44,7 @@ class AccountView(viewsets.ViewSet):
                 loginType="NORMAL",
                 paidmemberType="0",
                 Ticket="99999",
+                Cherry="99999",
                 email=email,
                 password=hashed_password,
                 nickname=nickname,
