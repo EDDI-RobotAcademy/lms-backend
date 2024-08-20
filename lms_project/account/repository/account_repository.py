@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class AccountRepository(ABC):
     @abstractmethod
-    def create(self, Ticket, paidmemberType, loginType):
+    def create(self, Cherry,Ticket, paidmemberType, loginType):
         pass
 
     @abstractmethod

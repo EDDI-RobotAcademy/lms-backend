@@ -8,7 +8,7 @@ class AccountService(ABC):
         pass
 
     @abstractmethod
-    def registerAccount(self, Ticket, paidmemberType, loginType, email, password, nickname):
+    def registerAccount(self, Cherry,Ticket, paidmemberType, loginType, email, password, nickname):
         pass
 
     @abstractmethod

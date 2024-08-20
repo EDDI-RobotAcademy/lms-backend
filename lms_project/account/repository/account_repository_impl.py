@@ -1,4 +1,5 @@
 from account.entity.account import Account
+from account.entity.account_cherry import AccountCherry
 from account.entity.account_login_type import AccountLoginType
 from account.entity.account_paid_member_type import AccountPaidMemberType
 from account.entity.account_ticket import AccountTicket
@@ -21,17 +22,20 @@ class AccountRepositoryImpl(AccountRepository):
 
         return cls.__instance
 
-    def create(self, Ticket, paidmemberType, loginType):
+    def create(self, Cherry, Ticket, paidmemberType, loginType):
         loginTypeEntity = AccountLoginType.objects.create(loginType=loginType)
 
         paidmemberTypeEntity = AccountPaidMemberType.objects.create(paidmemberType=paidmemberType)
 
         ticketEntity = AccountTicket.objects.create(Ticket=Ticket)
 
+        cherryEntity = AccountCherry.objects.create(Cherry=Cherry)
+
         account = Account.objects.create(
             loginType=loginTypeEntity,
             paidmemberType=paidmemberTypeEntity,
-            Ticket=ticketEntity
+            Ticket=ticketEntity,
+            Cherry=cherryEntity
         )
 
         return account
