@@ -47,8 +47,9 @@ class GoogleOauthView(viewsets.ViewSet):
             print(f"type of account.id: {type(account.id)}")
             ticket = self.accountService.findTicketByAccountId(account.id)
             nickname = self.accountService.findNicknameByAccountId(account.id)
+            cherry = self.accountService.findCherryByAccountId(account.id)
 
-            self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket)
+            self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket, cherry)
 
             return Response({'userToken': userToken}, status=status.HTTP_200_OK)
         except Exception as e:

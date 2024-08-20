@@ -63,3 +63,9 @@ class AccountRepositoryImpl(AccountRepository):
         except Exception as e:
             print(f"Error updating ticket count: {e}")
             return False
+
+    def findCherry(self, accountId):
+        account = AccountCherry.objects.get(id=accountId)
+        print("findCherry 출력", account.Cherry)
+        if account.Cherry:
+            return account.Cherry  # 대문자 T를 사용

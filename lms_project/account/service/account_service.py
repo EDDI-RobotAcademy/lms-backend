@@ -50,3 +50,7 @@ class AccountService(ABC):
     @abstractmethod
     def findNicknameByAccountId(self, accountId):
         pass
+
+    @abstractmethod
+    def findCherryByAccountId(self, accountId):
+        pass

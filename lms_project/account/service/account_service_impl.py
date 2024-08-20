@@ -67,4 +67,8 @@ class AccountServiceImpl(AccountService):
         nickname = self.__profileRepository.findByNickname(accountId)
         return nickname
 
+    def findCherryByAccountId(self, accountId):
+        cherry = self.__accountRepository.findCherry(accountId)
+        return cherry
+
 
