@@ -46,8 +46,9 @@ class GoogleOauthView(viewsets.ViewSet):
             userToken = str(uuid.uuid4())
             print(f"type of account.id: {type(account.id)}")
             ticket = self.accountService.findTicketByAccountId(account.id)
+            nickname = self.accountService.findNicknameByAccountId(account.id)
 
-            self.redisService.store_access_token(userToken, str(account.id), email, ticket)
+            self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket)
 
             return Response({'userToken': userToken}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -96,6 +97,18 @@ class GoogleOauthView(viewsets.ViewSet):
             return Response({'ticket': ticket}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error retrieving ticket info:', e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getUserNicknameInfo(self, request):
+        try:
+            userToken = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(userToken)
+            print(f"accountId 입니다: {accountInfo}")
+            nickname = accountInfo['nickname']
+            print("닉네임 출력", nickname)
+            return Response({'nickname': nickname}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print('Error retrieving nickname info:', e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def updateUserTicket(self, request):
