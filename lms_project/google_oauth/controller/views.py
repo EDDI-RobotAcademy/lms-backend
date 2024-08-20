@@ -97,3 +97,25 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print('Error retrieving ticket info:', e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def updateUserTicket(self, request):
+        try:
+            user_token = request.data.get('usertoken')
+            print("updateUserTicket() 유저토큰", user_token)
+            accountInfo = self.redisService.getValueByKey(user_token)
+            account_id = accountInfo['account_id']
+            print("updateUserTicket() 어카운트ID", account_id)
+
+            ticket = self.accountService.findTicketByAccountId(account_id)
+            if ticket <= 0:
+                return False, "No tickets available"
+
+            new_ticket_count = ticket - 1
+            self.accountService.updateTicketCount(account_id, new_ticket_count)
+
+            accountInfo['ticket'] = new_ticket_count
+            self.redisService.update_access_token(user_token, accountInfo)
+            return Response({'ticket': ticket}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error using ticket: {e}")
+            return False, str(e)

@@ -42,3 +42,7 @@ class AccountService(ABC):
     @abstractmethod
     def checkNickNameDuplication(self, nickname):
         pass
+
+    @abstractmethod
+    def updateTicketCount(self, user_id, new_ticket_count):
+        pass
