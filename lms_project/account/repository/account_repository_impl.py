@@ -47,3 +47,15 @@ class AccountRepositoryImpl(AccountRepository):
         print("findTicket 출력", account.Ticket)
         if account.Ticket:
             return account.Ticket  # 대문자 T를 사용
+
+
+    def updateTicket(self, user_id, new_ticket_count):
+        try:
+            account = Account.objects.get(id=user_id)
+            ticket = account.Ticket
+            ticket.Ticket = new_ticket_count
+            ticket.save()
+            return True
+        except Exception as e:
+            print(f"Error updating ticket count: {e}")
+            return False

@@ -58,3 +58,9 @@ class AccountServiceImpl(AccountService):
     def checkNickNameDuplication(self, nickname):
         nickname = self.__profileRepository.findByNickname(nickname)
         return nickname is not None
+
+    def updateTicketCount(self, user_id, new_ticket_count):
+        ticket = self.__accountRepository.updateTicket(user_id, new_ticket_count)
+        return ticket
+
+
