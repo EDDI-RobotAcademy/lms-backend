@@ -46,3 +46,7 @@ class AccountService(ABC):
     @abstractmethod
     def updateTicketCount(self, user_id, new_ticket_count):
         pass
+
+    @abstractmethod
+    def findNicknameByAccountId(self, accountId):
+        pass

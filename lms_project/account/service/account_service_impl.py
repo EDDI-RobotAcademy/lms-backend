@@ -63,4 +63,8 @@ class AccountServiceImpl(AccountService):
         ticket = self.__accountRepository.updateTicket(user_id, new_ticket_count)
         return ticket
 
+    def findNicknameByAccountId(self, accountId):
+        nickname = self.__profileRepository.findByNickname(accountId)
+        return nickname
+
 

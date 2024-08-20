@@ -25,9 +25,10 @@ class RedisServiceImpl(RedisService):
             cls.__instance = cls()
         return cls.__instance
 
-    def store_access_token(self, userToken, account_id, email, ticket):
+    def store_access_token(self, userToken, account_id, nickname, email, ticket):
         try:
             self.redis_client.hset(userToken, 'account_id', str(account_id))
+            self.redis_client.hset(userToken, 'nickname', nickname)
             self.redis_client.hset(userToken, 'email', email)
             self.redis_client.hset(userToken, 'ticket', ticket)
         except Exception as e:
@@ -41,11 +42,12 @@ class RedisServiceImpl(RedisService):
                 print(f"No data found for key: {key}")
                 return None
             return {k.decode('utf-8') if isinstance(k, bytes) else k:
-                    v.decode('utf-8') if isinstance(v, bytes) else v
+                        v.decode('utf-8') if isinstance(v, bytes) else v
                     for k, v in data.items()}
         except Exception as e:
             print(f'Error retrieving data from Redis: {e}')
             return None
+
     def deleteKey(self, key):
         try:
             result = self.redis_client.delete(key)
