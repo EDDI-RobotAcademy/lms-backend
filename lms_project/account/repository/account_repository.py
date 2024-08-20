@@ -17,3 +17,7 @@ class AccountRepository(ABC):
     @abstractmethod
     def updateTicket(self, user_id, new_ticket_count):
         pass
+
+    @abstractmethod
+    def findCherry(self, accountId):
+        pass
