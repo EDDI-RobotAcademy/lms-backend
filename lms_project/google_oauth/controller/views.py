@@ -133,3 +133,15 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print(f"Error using ticket: {e}")
             return False, str(e)
+
+    def getUserCherryInfo(self, request):
+        try:
+            userToken = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(userToken)
+            print(f"accountId 입니다: {accountInfo}")
+            cherry = accountInfo['cherry']
+            print("티켓만 출력", cherry)
+            return Response({'cherry': cherry}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print('Error retrieving cherry info:', e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
