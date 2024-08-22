@@ -101,13 +101,11 @@ class ProfileRepositoryImpl(ProfileRepository):
             print(f"accountId 검사 중 에러: {e}")
             return None
 
-    def findByNickname(self, nickname):
+    def findByNickname(self, accountId):
         try:
-            profile = Profile.objects.get(nickname=nickname)
-            return profile
-        except Profile.DoesNotExist:
-            print(f"email 찾을 수 없음: {nickname}")
-            return None
+            account = Profile.objects.get(id=accountId)
+            nickname = Profile.objects.get(nickname=account.nickname)
+            return nickname.nickname
         except Exception as e:
             print(f"email 검사 중 에러: {e}")
             return None

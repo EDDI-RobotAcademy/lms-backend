@@ -8,7 +8,7 @@ class AccountService(ABC):
         pass
 
     @abstractmethod
-    def registerAccount(self, Ticket, paidmemberType, loginType, email, password, nickname):
+    def registerAccount(self, Cherry,Ticket, paidmemberType, loginType, email, password, nickname):
         pass
 
     @abstractmethod
@@ -41,4 +41,16 @@ class AccountService(ABC):
 
     @abstractmethod
     def checkNickNameDuplication(self, nickname):
+        pass
+
+    @abstractmethod
+    def updateTicketCount(self, user_id, new_ticket_count):
+        pass
+
+    @abstractmethod
+    def findNicknameByAccountId(self, accountId):
+        pass
+
+    @abstractmethod
+    def findCherryByAccountId(self, accountId):
         pass

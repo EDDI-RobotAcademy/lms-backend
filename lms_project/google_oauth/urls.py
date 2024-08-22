@@ -12,4 +12,7 @@ urlpatterns = [
     path('redis-get-email', GoogleOauthView.as_view({'post': 'getUserTokenEmailInfo'}), name='redis-get-value'),
     path('redis-get-paid-member-type', GoogleOauthView.as_view({'post': 'getUserTokenPaidMemberTypeInfo'}), name='redis-get-paid-member-type'),
     path('redis-get-ticket', GoogleOauthView.as_view({'post': 'getUserTicketInfo'}), name='redis-get-ticket'),
+    path('redis-get-nickname', GoogleOauthView.as_view({'post': 'getUserNicknameInfo'}), name='redis-get-nickname'),
+    path('redis-update-ticket', GoogleOauthView.as_view({'post': 'updateUserTicket'}), name='redis-update-user-ticket'),
+    path('redis-get-cherry', GoogleOauthView.as_view({'post': 'getUserCherryInfo'}), name='redis-get-cherry'),
 ]
