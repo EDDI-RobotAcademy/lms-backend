@@ -60,15 +60,25 @@ class ProfileRepositoryImpl(ProfileRepository):
             if account is None:
                 return None
 
-            if bcrypt.checkpw(password.encode("utf-8"), account.password.encode("utf-8")):
+            accountpassword = account.password.encode("utf-8")
+            passwordencode = password.encode("utf-8")
+
+            print("accountpassword", accountpassword)
+            print("passwordencode", passwordencode)
+
+            checkbcrypt = bcrypt.checkpw(password.encode("utf-8"), account.password.encode("utf-8"))
+            print("checkbcrypt 체크",checkbcrypt)
+            if checkbcrypt == True:
                 payload = {
                     'id': account.id,
                     'email': email,
                     'exp': datetime.utcnow() + timedelta(hours=24)
                 }
                 access_token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+                print("access_token 출력", access_token)
                 return access_token
             else:
+                print("checkbcrypt가 false임")
                 return None
 
         except Exception as e:
