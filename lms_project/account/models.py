@@ -5,4 +5,5 @@ from account.entity.profile import Profile
 from account.entity.account_paid_member_type import AccountPaidMemberType
 from account.entity.account_ticket import AccountTicket
 from account.entity.account_cherry import AccountCherry
+from account.entity.account_attendance_check import AccountAttendanceCheck
 # Create your models here.

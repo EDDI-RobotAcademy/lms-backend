@@ -48,12 +48,14 @@ class AccountView(viewsets.ViewSet):
                 email=email,
                 password=hashed_password,
                 nickname=nickname,
+                Attendance_cherry="0",
+                Attendance_date="0",
             )
 
             serializer = ProfileSerializer(account)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            print("계정 생성 중 에러 발생:", e)
+            print("계정 생성 중 에러 발생1:", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def registerSocialAccount(self, request):
