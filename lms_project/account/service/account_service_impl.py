@@ -24,8 +24,9 @@ class AccountServiceImpl(AccountService):
         profile = self.__profileRepository.findByEmail(email)
         return profile is not None
 
-    def registerAccount(self, Cherry, Ticket, paidmemberType, loginType, email, password, nickname):
-        account = self.__accountRepository.create(Cherry, Ticket, paidmemberType, loginType)
+    def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email, password, nickname):
+        print("어카운트 서비스 접근")
+        account = self.__accountRepository.create(Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType)
         return self.__profileRepository.create(email, password, nickname, account)
 
     def registerSocialAccount(self, paidmemberType, loginType, email):
@@ -71,4 +72,11 @@ class AccountServiceImpl(AccountService):
         cherry = self.__accountRepository.findCherry(accountId)
         return cherry
 
+    def findAttendance_CherryByAccountId(self, accountId):
+        print("findAttendance_CherryByAccountId() 접근")
+        attendance_cherry = self.__accountRepository.findAttendance_Cherry(accountId)
+        return attendance_cherry
 
+    def findAttendance_DateByAccountId(self, accountId):
+        attendance_date = self.__accountRepository.findAttendance_Date(accountId)
+        return attendance_date

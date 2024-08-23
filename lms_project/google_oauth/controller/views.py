@@ -48,12 +48,14 @@ class GoogleOauthView(viewsets.ViewSet):
             ticket = self.accountService.findTicketByAccountId(account.id)
             nickname = self.accountService.findNicknameByAccountId(account.id)
             cherry = self.accountService.findCherryByAccountId(account.id)
+            attendance_cherry = self.accountService.findAttendance_CherryByAccountId(account.id)
+            attendance_date = self.accountService.findAttendance_DateByAccountId(account.id)
 
-            self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket, cherry)
+            self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket, cherry, attendance_cherry, attendance_date)
 
             return Response({'userToken': userToken}, status=status.HTTP_200_OK)
         except Exception as e:
-            print('Error storing access token in Redis:', e)
+            print('redisAccessToken()', e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def getUserTokenEmailInfo(self, request):
@@ -135,6 +137,18 @@ class GoogleOauthView(viewsets.ViewSet):
             return False, str(e)
 
     def getUserCherryInfo(self, request):
+        try:
+            userToken = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(userToken)
+            print(f"accountId 입니다: {accountInfo}")
+            cherry = accountInfo['cherry']
+            print("티켓만 출력", cherry)
+            return Response({'cherry': cherry}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print('Error retrieving cherry info:', e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getUserAttendanceCherryInfo(self, request):
         try:
             userToken = request.data.get('usertoken')
             accountInfo = self.redisService.getValueByKey(userToken)

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class AccountRepository(ABC):
     @abstractmethod
-    def create(self, Cherry,Ticket, paidmemberType, loginType):
+    def create(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType):
         pass
 
     @abstractmethod
@@ -20,4 +20,12 @@ class AccountRepository(ABC):
 
     @abstractmethod
     def findCherry(self, accountId):
+        pass
+
+    @abstractmethod
+    def findAttendance_Cherry(self, accountId):
+        pass
+
+    @abstractmethod
+    def findAttendance_Date(self, accountId):
         pass
