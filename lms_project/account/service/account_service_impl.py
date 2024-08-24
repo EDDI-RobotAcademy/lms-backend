@@ -80,3 +80,7 @@ class AccountServiceImpl(AccountService):
     def findAttendance_DateByAccountId(self, accountId):
         attendance_date = self.__accountRepository.findAttendance_Date(accountId)
         return attendance_date
+
+    def updateCherryCount(self, user_id, new_cherry_count):
+        cherry = self.__accountRepository.updateCherry(user_id, new_cherry_count)
+        return cherry

@@ -83,3 +83,14 @@ class AccountRepositoryImpl(AccountRepository):
         account = AccountAttendanceCheck.objects.get(id=accountId)
         return account.Attendance_date
 
+    def updateCherry(self, user_id, new_cherry_count):
+        try:
+            account = Account.objects.get(id=user_id)
+            cherry = account.Cherry
+            cherry.Cherry = new_cherry_count
+            print("체리점체리 출력",cherry.Cherry)
+            cherry.save()
+            return True
+        except Exception as e:
+            print(f"Error updating cherry count: {e}")
+            return False

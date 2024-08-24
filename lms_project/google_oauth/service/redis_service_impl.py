@@ -75,3 +75,12 @@ class RedisServiceImpl(RedisService):
         except Exception as e:
             print(f"Error updating access token in Redis: {e}")
             return False
+
+    def update_cherry_count(self, userToken, accountInfo):
+        try:
+            cherry = accountInfo['cherry']
+            self.redis_client.hset(userToken, 'cherry', cherry)
+            return True
+        except Exception as e:
+            print(f"Error updating access token in Redis: {e}")
+            return False
