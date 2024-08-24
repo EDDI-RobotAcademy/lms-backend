@@ -62,3 +62,7 @@ class AccountService(ABC):
     @abstractmethod
     def findAttendance_DateByAccountId(self, accountId):
         pass
+
+    @abstractmethod
+    def updateCherryCount(self, user_id, new_cherry_count):
+        pass

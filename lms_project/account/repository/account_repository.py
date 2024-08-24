@@ -29,3 +29,7 @@ class AccountRepository(ABC):
     @abstractmethod
     def findAttendance_Date(self, accountId):
         pass
+
+    @abstractmethod
+    def updateCherry(self, user_id, new_cherry_count):
+        pass

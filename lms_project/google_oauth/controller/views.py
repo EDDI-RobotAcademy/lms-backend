@@ -51,7 +51,8 @@ class GoogleOauthView(viewsets.ViewSet):
             attendance_cherry = self.accountService.findAttendance_CherryByAccountId(account.id)
             attendance_date = self.accountService.findAttendance_DateByAccountId(account.id)
 
-            self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket, cherry, attendance_cherry, attendance_date)
+            self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket, cherry,
+                                                 attendance_cherry, attendance_date)
 
             return Response({'userToken': userToken}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -159,3 +160,44 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print('Error retrieving cherry info:', e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def purchaseTicket(self, request):
+        try:
+            user_token = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(user_token)
+            purchaseTicket = request.data.get('ticket')
+            account_id = accountInfo['account_id']
+
+            ticket = self.accountService.findTicketByAccountId(account_id)
+            if ticket <= 0:
+                return False, "티켓 없음"
+
+            new_ticket_count = ticket + purchaseTicket
+            self.accountService.updateTicketCount(account_id, new_ticket_count)
+
+            accountInfo['ticket'] = new_ticket_count
+            self.redisService.update_access_token(user_token, accountInfo)
+            return Response({'ticket': ticket}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error purchase ticket: {e}")
+            return False, str(e)
+
+    def updateUserCherry(self, request):
+        try:
+            user_token = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(user_token)
+            account_id = accountInfo['account_id']
+            updateCherry = request.data.get('cherry')
+            cherry = self.accountService.findCherryByAccountId(account_id)
+            if cherry <= 0:
+                return False, "No tickets available"
+
+            new_cherry_count = cherry - updateCherry
+            self.accountService.updateCherryCount(account_id, new_cherry_count)
+
+            accountInfo['cherry'] = new_cherry_count
+            self.redisService.update_cherry_count(user_token, accountInfo)
+            return Response({'cherry': cherry}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error using ticket: {e}")
+            return False, str(e)
