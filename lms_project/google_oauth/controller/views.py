@@ -201,3 +201,22 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print(f"Error using ticket: {e}")
             return False, str(e)
+
+    def purchaseCherry(self, request):
+        try:
+            user_token = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(user_token)
+            purchaseCherry = request.data.get('cherry')
+            account_id = accountInfo['account_id']
+
+            cherry = self.accountService.findCherryByAccountId(account_id)
+
+            new_cherry_count = cherry + purchaseCherry
+            self.accountService.updateCherryCount(account_id, new_cherry_count)
+
+            accountInfo['cherry'] = new_cherry_count
+            self.redisService.update_cherry_count(user_token, accountInfo)
+            return Response({'cherry': cherry}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error purchase cherry: {e}")
+            return False, str(e)
