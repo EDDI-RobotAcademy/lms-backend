@@ -17,4 +17,5 @@ urlpatterns = [
     path('redis-get-cherry', GoogleOauthView.as_view({'post': 'getUserCherryInfo'}), name='redis-get-cherry'),
     path('redis-purchase-ticket', GoogleOauthView.as_view({'post': 'purchaseTicket'}), name='redis-purchase-ticket'),
     path('redis-update-cherry', GoogleOauthView.as_view({'post': 'updateUserCherry'}), name='redis-update-user-cherry'),
+    path('redis-purchase-cherry', GoogleOauthView.as_view({'post': 'purchaseCherry'}), name='redis-purchase-cherry'),
 ]
