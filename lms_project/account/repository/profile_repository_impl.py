@@ -67,7 +67,7 @@ class ProfileRepositoryImpl(ProfileRepository):
             print("passwordencode", passwordencode)
 
             checkbcrypt = bcrypt.checkpw(password.encode("utf-8"), account.password.encode("utf-8"))
-            print("checkbcrypt 체크",checkbcrypt)
+            print("checkbcrypt 체크", checkbcrypt)
             if checkbcrypt == True:
                 payload = {
                     'id': account.id,
@@ -89,7 +89,7 @@ class ProfileRepositoryImpl(ProfileRepository):
         try:
             profile = Profile.objects.get(email=email)
             login_type = AccountLoginType.objects.get(id=profile.id)
-            print("로그인의 로그인 타입",login_type.loginType)
+            print("로그인의 로그인 타입", login_type.loginType)
             return login_type.loginType
         except Profile.DoesNotExist:
             print(f"email 찾을 수 없음: {email}")
@@ -119,3 +119,19 @@ class ProfileRepositoryImpl(ProfileRepository):
         except Exception as e:
             print(f"email 검사 중 에러: {e}")
             return None
+
+    def updatePassword(self, email, newpassword):
+        try:
+            profile = Profile.objects.get(email=email)
+            profile.password = newpassword
+            profile.save()
+            print("새 비밀번호가 성공적으로 저장되었습니다.")
+            return True
+
+        except Profile.DoesNotExist:
+            print(f"해당 이메일({email})을 가진 사용자를 찾을 수 없습니다.")
+            return False
+
+        except Exception as e:
+            print(f"updatePassword 중 에러 발생: {e}")
+            return False

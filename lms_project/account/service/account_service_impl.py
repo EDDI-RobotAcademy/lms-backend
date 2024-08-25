@@ -2,6 +2,7 @@ from account.repository.account_repository_impl import AccountRepositoryImpl
 from account.repository.profile_repository_impl import ProfileRepositoryImpl
 from account.service.account_service import AccountService
 
+
 class AccountServiceImpl(AccountService):
     __instance = None
 
@@ -24,9 +25,11 @@ class AccountServiceImpl(AccountService):
         profile = self.__profileRepository.findByEmail(email)
         return profile is not None
 
-    def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email, password, nickname):
+    def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email,
+                        password, nickname):
         print("어카운트 서비스 접근")
-        account = self.__accountRepository.create(Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType)
+        account = self.__accountRepository.create(Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType,
+                                                  loginType)
         return self.__profileRepository.create(email, password, nickname, account)
 
     def registerSocialAccount(self, paidmemberType, loginType, email):
@@ -84,3 +87,7 @@ class AccountServiceImpl(AccountService):
     def updateCherryCount(self, user_id, new_cherry_count):
         cherry = self.__accountRepository.updateCherry(user_id, new_cherry_count)
         return cherry
+
+    def changePassword(self, email, newpassword):
+        password = self.__profileRepository.updatePassword(email, newpassword)
+        return password
