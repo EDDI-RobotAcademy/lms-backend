@@ -29,3 +29,7 @@ class ProfileRepository(ABC):
     @abstractmethod
     def findByNickname(self, accountId):
         pass
+
+    @abstractmethod
+    def updatePassword(self, email, newpassword):
+        pass

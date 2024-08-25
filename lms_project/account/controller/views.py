@@ -122,3 +122,22 @@ class AccountView(viewsets.ViewSet):
         except Exception as e:
             print("이메일 중복 체크 중 에러 발생:", e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def changeNewPassword(self, request):
+        print("changeNewPassword()")
+        try:
+            newpassword = request.data.get("password")
+            email = request.data.get("email")
+            hashed_password = bcrypt.hashpw(newpassword.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+            print(" 새로운 비밀번호 ", hashed_password)
+            success = self.accountService.changePassword(email, hashed_password)
+            print("True" if success else "False")
+            return Response(
+                {
+                    "success": success
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print("changeNewPassword 중 에러 발생:", e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

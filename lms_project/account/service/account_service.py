@@ -8,7 +8,8 @@ class AccountService(ABC):
         pass
 
     @abstractmethod
-    def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email, password, nickname):
+    def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email,
+                        password, nickname):
         pass
 
     @abstractmethod
@@ -65,4 +66,8 @@ class AccountService(ABC):
 
     @abstractmethod
     def updateCherryCount(self, user_id, new_cherry_count):
+        pass
+
+    @abstractmethod
+    def changePassword(self, email, newpassword):
         pass
