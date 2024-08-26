@@ -8,5 +8,6 @@ class Profile(models.Model):
     password = models.CharField(max_length=64, default="n")
     nickname = models.CharField(max_length=64, default="n")
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    img = models.IntegerField(default=0)
     class Meta:
         db_table = 'profile'

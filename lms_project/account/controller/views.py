@@ -48,6 +48,7 @@ class AccountView(viewsets.ViewSet):
                 email=email,
                 password=hashed_password,
                 nickname=nickname,
+                img="0",
                 Attendance_cherry="0",
                 Attendance_date="0",
             )
@@ -140,4 +141,38 @@ class AccountView(viewsets.ViewSet):
             )
         except Exception as e:
             print("changeNewPassword 중 에러 발생:", e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getProfileImg(self, request):
+        try:
+            email = request.data.get("email")
+            getProfileImg = self.accountService.checkProfileImg(email)
+            print("getProfileImg 출력이 되나요?", getProfileImg)
+            return Response(
+                {
+                    "getProfileImg": getProfileImg
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print("getProfileImg 중 에러 발생:", e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def setProfileImg(self, request):
+        print("getProfileImg()")
+        try:
+            email = request.data.get("email")
+            img_id = request.data.get("img_id")
+            print("리퀘스트 데이터", request.data)
+            print("img_id 출력",img_id)
+            setProfileImg = self.accountService.settingProfileImg(email, img_id)
+            print("setProfileImg", setProfileImg)
+            return Response(
+                {
+                    "setProfileImg": setProfileImg
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print("setProfileImg 중 에러 발생:", e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

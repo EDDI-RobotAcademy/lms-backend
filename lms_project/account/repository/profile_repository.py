@@ -7,7 +7,7 @@ class ProfileRepository(ABC):
         pass
 
     @abstractmethod
-    def create(self, email, password, nickname, account):
+    def create(self, email, password, nickname, img, account):
         pass
 
     @abstractmethod
@@ -32,4 +32,12 @@ class ProfileRepository(ABC):
 
     @abstractmethod
     def updatePassword(self, email, newpassword):
+        pass
+
+    @abstractmethod
+    def findByProfileImg(self, email):
+        pass
+
+    @abstractmethod
+    def updateProfileImg(self, email):
         pass

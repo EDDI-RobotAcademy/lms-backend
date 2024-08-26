@@ -36,11 +36,12 @@ class ProfileRepositoryImpl(ProfileRepository):
             print(f"email 검사 중 에러: {e}")
             return None
 
-    def create(self, email, password, nickname, account):
+    def create(self, email, password, nickname, img, account):
         profile = Profile.objects.create(
             email=email,
             password=password,
             nickname=nickname,
+            img=img,
             account=account,
         )
         return profile
@@ -134,4 +135,30 @@ class ProfileRepositoryImpl(ProfileRepository):
 
         except Exception as e:
             print(f"updatePassword 중 에러 발생: {e}")
+            return False
+
+    def findByProfileImg(self, email):
+        try:
+            profile = Profile.objects.get(email=email)
+            print("findByProfileImg의 profile", profile.img)
+            return profile.img
+        except Exception as e:
+            print(f"findByProfileImg 중 에러: {e}")
+            return None
+        pass
+
+    def updateProfileImg(self, email, img_id):
+        try:
+            profile = Profile.objects.get(email=email)
+            profile.img = img_id
+            profile.save()
+            print("새 프로필이 성공적으로 저장되었습니다.")
+            return img_id
+
+        except Profile.DoesNotExist:
+            print(f"해당 이메일({email})을 가진 사용자를 찾을 수 없습니다.")
+            return False
+
+        except Exception as e:
+            print(f"updateProfileImg 중 에러 발생: {e}")
             return False

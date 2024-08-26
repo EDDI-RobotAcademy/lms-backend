@@ -9,7 +9,7 @@ class AccountService(ABC):
 
     @abstractmethod
     def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email,
-                        password, nickname):
+                        password, nickname, img):
         pass
 
     @abstractmethod
@@ -70,4 +70,12 @@ class AccountService(ABC):
 
     @abstractmethod
     def changePassword(self, email, newpassword):
+        pass
+
+    @abstractmethod
+    def checkProfileImg(self, email):
+        pass
+
+    @abstractmethod
+    def settingProfileImg(self, email, img_id):
         pass
