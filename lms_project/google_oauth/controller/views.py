@@ -220,3 +220,15 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print(f"Error purchase cherry: {e}")
             return False, str(e)
+
+    def dropRedisTokenForLogout(self, request):
+        try:
+            userToken = request.data.get('userToken')
+            isSuccess = self.redisService.deleteKey(userToken)
+            return Response({'isSuccess':isSuccess}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print('Redis Token 해제 중 에러 발생: ', e)
+            return Response({'error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
