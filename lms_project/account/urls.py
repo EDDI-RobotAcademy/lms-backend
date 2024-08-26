@@ -20,4 +20,10 @@ urlpatterns = [
     path('change-new-password',
          AccountView.as_view({'post': 'changeNewPassword'}),
          name='change-new-password'),
+    path('get-profile-img',
+         AccountView.as_view({'post': 'getProfileImg'}),
+         name='account-get-profile-img'),
+    path('set-profile-img',
+         AccountView.as_view({'post': 'setProfileImg'}),
+         name='account-set-profile-img'),
 ]

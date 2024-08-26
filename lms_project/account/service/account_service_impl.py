@@ -26,11 +26,11 @@ class AccountServiceImpl(AccountService):
         return profile is not None
 
     def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email,
-                        password, nickname):
+                        password, nickname, img):
         print("어카운트 서비스 접근")
         account = self.__accountRepository.create(Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType,
                                                   loginType)
-        return self.__profileRepository.create(email, password, nickname, account)
+        return self.__profileRepository.create(email, password, nickname, img, account)
 
     def registerSocialAccount(self, paidmemberType, loginType, email):
         account = self.__accountRepository.create(paidmemberType, loginType)
@@ -91,3 +91,11 @@ class AccountServiceImpl(AccountService):
     def changePassword(self, email, newpassword):
         password = self.__profileRepository.updatePassword(email, newpassword)
         return password
+
+    def checkProfileImg(self, email):
+        ProfileImg = self.__profileRepository.findByProfileImg(email)
+        return ProfileImg
+
+    def settingProfileImg(self, email, img_id):
+        ProfileImg = self.__profileRepository.updateProfileImg(email, img_id)
+        return ProfileImg
