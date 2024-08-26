@@ -26,4 +26,7 @@ urlpatterns = [
     path('set-profile-img',
          AccountView.as_view({'post': 'setProfileImg'}),
          name='account-set-profile-img'),
+    path('account-create-time',
+         AccountView.as_view({'post': 'getAccountCreateTime'}),
+         name='account-set-profile-img'),
 ]

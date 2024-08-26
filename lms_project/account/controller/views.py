@@ -176,3 +176,18 @@ class AccountView(viewsets.ViewSet):
         except Exception as e:
             print("setProfileImg 중 에러 발생:", e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getAccountCreateTime(self, request):
+        try:
+            email = request.data.get("email")
+            getCreateTime = self.accountService.checkAccountCreateTime(email)
+            print("getAccountCreateTime 출력이 되나요?", getCreateTime)
+            return Response(
+                {
+                    "getCreateTime": getCreateTime
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print("getCreateTime 중 에러 발생:", e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

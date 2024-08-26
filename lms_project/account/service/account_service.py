@@ -79,3 +79,7 @@ class AccountService(ABC):
     @abstractmethod
     def settingProfileImg(self, email, img_id):
         pass
+
+    @abstractmethod
+    def checkAccountCreateTime(self, email):
+        pass

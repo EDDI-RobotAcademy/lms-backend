@@ -162,3 +162,13 @@ class ProfileRepositoryImpl(ProfileRepository):
         except Exception as e:
             print(f"updateProfileImg 중 에러 발생: {e}")
             return False
+
+    def findByAccountCreateTime(self, email):
+        try:
+            profile = Profile.objects.get(email=email)
+            print("findByAccountCreateTime 반환", profile.created_at)
+            return profile.created_at
+        except Exception as e:
+            print(f"findByAccountCreateTime 중 에러: {e}")
+            return None
+        pass
