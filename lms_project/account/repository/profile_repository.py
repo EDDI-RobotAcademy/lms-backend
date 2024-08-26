@@ -41,3 +41,7 @@ class ProfileRepository(ABC):
     @abstractmethod
     def updateProfileImg(self, email):
         pass
+
+    @abstractmethod
+    def findByAccountCreateTime(self, email):
+        pass

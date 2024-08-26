@@ -99,3 +99,7 @@ class AccountServiceImpl(AccountService):
     def settingProfileImg(self, email, img_id):
         ProfileImg = self.__profileRepository.updateProfileImg(email, img_id)
         return ProfileImg
+
+    def checkAccountCreateTime(self, email):
+        CreateTime = self.__profileRepository.findByAccountCreateTime(email)
+        return CreateTime
