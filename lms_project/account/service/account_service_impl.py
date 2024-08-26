@@ -26,7 +26,7 @@ class AccountServiceImpl(AccountService):
         return profile is not None
 
     def registerAccount(self, Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType, loginType, email,
-                        password, nickname, img):
+                        password, nickname, img,):
         print("어카운트 서비스 접근")
         account = self.__accountRepository.create(Attendance_date, Attendance_cherry, Cherry, Ticket, paidmemberType,
                                                   loginType)
