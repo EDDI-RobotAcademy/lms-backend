@@ -3,14 +3,12 @@ import uuid
 from django.conf import settings
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-
+from django.http import JsonResponse
 from account.service.account_service_impl import AccountServiceImpl
 from google_oauth.service.google_oauth_service_impl import GoogleOauthServiceImpl
 from google.oauth2 import id_token
-from google.auth.transport import requests
-
 from google_oauth.service.redis_service_impl import RedisServiceImpl
-
+import requests
 
 class GoogleOauthView(viewsets.ViewSet):
     googleOauthService = GoogleOauthServiceImpl.getInstance()
@@ -230,5 +228,50 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print('Redis Token 해제 중 에러 발생: ', e)
             return Response({'error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def ReadyKakaoPay(self, request):
+        amount = request.data.get('amount')
+        print("amount 출력", amount)
+        url = "https://kapi.kakao.com/v1/payment/ready"
+        headers = {
+            'Authorization': "KakaoAK " + "163e47ead36bc85f9b5770c9be7b4a1e",
+            'Content-type': 'application/json',
+        }
+        params = {
+            "cid": "TC0ONETIME",
+            "partner_order_id": "1001",
+            "partner_user_id": "dongsik",
+            "item_name": "포인트",
+            "quantity": 1,
+            "total_amount": amount,
+            "vat_amount": 200,
+            "tax_free_amount": 0,
+            "approval_url": "http://localhost:8080/kakao_oauth/kakao-approve",
+            "fail_url": "http://localhost:8080",
+            "cancel_url": "http://localhost:8080",
+        }
+        response = requests.post(url, params=params, headers=headers)
+        return JsonResponse(response.json())
+
+    def ApproveKakaoPay(self, request):
+        pg_token= request.data.get('pg_token')
+        tid= request.data.get('tid')
+        print("피지 토큰 출력",pg_token)
+        print("tid 출력",tid)
+        url = "https://kapi.kakao.com/v1/payment/approve"
+        headers = {
+            'Authorization': "KakaoAK " + "163e47ead36bc85f9b5770c9be7b4a1e",
+            'Content-type': 'application/json',
+        }
+        params = {
+            "cid": "TC0ONETIME",
+            "tid": tid,
+            "partner_order_id": "1001",
+            "partner_user_id": "dongsik",
+            "pg_token": pg_token,
+        }
+        response = requests.post(url, params=params, headers=headers)
+        return JsonResponse(response.json())
+
 
 
