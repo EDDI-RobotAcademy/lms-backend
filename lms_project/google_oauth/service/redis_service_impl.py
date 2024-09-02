@@ -25,7 +25,8 @@ class RedisServiceImpl(RedisService):
             cls.__instance = cls()
         return cls.__instance
 
-    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry, attendance_date):
+    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry,
+                           attendance_date):
         try:
             self.redis_client.hset(userToken, 'account_id', str(account_id))
             self.redis_client.hset(userToken, 'nickname', nickname)
@@ -79,4 +80,14 @@ class RedisServiceImpl(RedisService):
             return True
         except Exception as e:
             print(f"Error updating access token in Redis: {e}")
+            return False
+
+    def update_attendance_cherry_count(self, user_token, accountInfo):
+        try:
+            attendance_cherry = accountInfo['attendance_cherry']
+            self.redis_client.hset(user_token, 'attendance_cherry', attendance_cherry)
+            return True
+
+        except Exception as e:
+            print(f"Error updating attendance cherry in redis: {e}")
             return False

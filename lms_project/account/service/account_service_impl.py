@@ -103,3 +103,7 @@ class AccountServiceImpl(AccountService):
     def checkAccountCreateTime(self, email):
         CreateTime = self.__profileRepository.findByAccountCreateTime(email)
         return CreateTime
+
+    def updateAttendanceCherry(self, account_id, new_attendanceCherry):
+        self.__accountRepository.updateAttendanceCherry(account_id, new_attendanceCherry)
+        return True

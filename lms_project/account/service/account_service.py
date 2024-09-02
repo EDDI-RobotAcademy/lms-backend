@@ -83,3 +83,7 @@ class AccountService(ABC):
     @abstractmethod
     def checkAccountCreateTime(self, email):
         pass
+
+    @abstractmethod
+    def updateAttendanceCherry(self, account_id, new_attendanceCherry):
+        pass
