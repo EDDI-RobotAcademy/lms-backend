@@ -65,12 +65,8 @@ class RedisServiceImpl(RedisService):
 
     def update_access_token(self, userToken, accountInfo):
         try:
-            print("update_access_token 접근")
-            print("userToken 출력", userToken)
-            print("accountInfo 출력", accountInfo['ticket'])
             ticket = accountInfo['ticket']
             self.redis_client.hset(userToken, 'ticket', ticket)
-            print(f"Access token updated for userToken: {userToken}")
             return True
         except Exception as e:
             print(f"Error updating access token in Redis: {e}")
