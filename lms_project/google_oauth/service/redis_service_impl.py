@@ -35,6 +35,11 @@ class RedisServiceImpl(RedisService):
             self.redis_client.hset(userToken, 'cherry', cherry)
             self.redis_client.hset(userToken, 'attendance_cherry', attendance_cherry)
             self.redis_client.hset(userToken, 'attendance_date', attendance_date)
+            self.redis_client.hset(userToken, 'attendance_date', attendance_date)
+            self.redis_client.hset(userToken, 'attendance_date', attendance_date)
+            self.redis_client.hset(userToken, 'attendance_date', attendance_date)
+            self.redis_client.hset(userToken, 'attendance_date', attendance_date)
+            self.redis_client.hset(userToken, 'attendance_date', attendance_date)
         except Exception as e:
             print('Error storing access token in Redis:', e)
             raise e

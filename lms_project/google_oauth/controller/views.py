@@ -256,20 +256,18 @@ class GoogleOauthView(viewsets.ViewSet):
 
     def addAttendanceCherry(self, request):
         try:
-            user_token = request.data.get('usertoken')
+            user_token = request.data.get('userToken')
+            print("user_token 출력",user_token)
             accountInfo = self.redisService.getValueByKey(user_token)
+            print("어카운트 인포", accountInfo)
             account_id = accountInfo['account_id']
 
-            # TODO: 출석체리 비교 로직 추가
-            currentAttendanceCherry = request.data.get('atttendancecherry')
             attendanceCherry = self.accountService.findAttendance_CherryByAccountId(account_id)
 
             new_attendanceCherry = attendanceCherry + 50
 
-            # DB에 변동된 체리 개수 업데이트
             self.accountService.updateAttendanceCherry(account_id, new_attendanceCherry)
 
-            # redis에 변동된 체리 개수 업데이트
             accountInfo['attendance_cherry'] = new_attendanceCherry
             self.redisService.update_attendance_cherry_count(user_token, accountInfo)
 

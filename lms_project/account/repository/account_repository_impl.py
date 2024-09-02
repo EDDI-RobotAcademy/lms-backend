@@ -80,7 +80,9 @@ class AccountRepositoryImpl(AccountRepository):
 
     def findAttendance_Date(self, accountId):
         account = AccountAttendanceCheck.objects.get(id=accountId)
-        return account.Attendance_date
+        account_attendance_date = [account.Attendance_date1,account.Attendance_date2, account.Attendance_date3]
+        print("출력 ", account_attendance_date)
+        return account_attendance_date
 
     def updateCherry(self, user_id, new_cherry_count):
         try:
