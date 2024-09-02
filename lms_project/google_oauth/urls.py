@@ -22,4 +22,5 @@ urlpatterns = [
     path('logout', GoogleOauthView.as_view({'post': 'dropRedisTokenForLogout'}), name='drop-redis-token-for-logout'),
     path('readyKakaoPay',GoogleOauthView.as_view({'post': 'ReadyKakaoPay'}),name='readykakaoPay-test'),
     path('approveKakaoPay',GoogleOauthView.as_view({'post': 'ApproveKakaoPay'}),name='approvekakaoPay-test'),
+    path('redis-add-attendancecherry',GoogleOauthView.as_view({'post': 'addAttendanceCherry'}),name='redis-add-attendancecherry'),
 ]
