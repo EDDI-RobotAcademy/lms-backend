@@ -275,3 +275,19 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print(f"Error using ticket: {e}")
             return False, str(e)
+
+    def getAccountIdFromUserToken(self, request):
+        try:
+            userToken = request.data.get('usertoken')
+            if not userToken:
+                return Response({'error': '사용자 토큰이 필요합니다'}, status=status.HTTP_400_BAD_REQUEST)
+
+            account_id = self.redisService.get_account_id_by_usertoken(userToken)
+            if not account_id:
+                return Response({'error': 'Invalid user token'}, status=status.HTTP_404_NOT_FOUND)
+
+            return Response({'account_id': account_id}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(f"account_id를 검색하는 중 오류가 발생했습니다.: {e}")
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
