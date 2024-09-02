@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from django.conf import settings
@@ -93,9 +94,7 @@ class GoogleOauthView(viewsets.ViewSet):
         try:
             userToken = request.data.get('usertoken')
             accountInfo = self.redisService.getValueByKey(userToken)
-            print(f"accountId 입니다: {accountInfo}")
             ticket = accountInfo['ticket']
-            print("티켓만 출력", ticket)
             return Response({'ticket': ticket}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error retrieving ticket info:', e)
@@ -105,9 +104,7 @@ class GoogleOauthView(viewsets.ViewSet):
         try:
             userToken = request.data.get('usertoken')
             accountInfo = self.redisService.getValueByKey(userToken)
-            print(f"accountId 입니다: {accountInfo}")
             nickname = accountInfo['nickname']
-            print("닉네임 출력", nickname)
             return Response({'nickname': nickname}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error retrieving nickname info:', e)
@@ -230,11 +227,11 @@ class GoogleOauthView(viewsets.ViewSet):
             return Response({'error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def ReadyKakaoPay(self, request):
+        KAKAOPAY_KEY = os.getenv('KAKAOPAY_KEY')
         amount = request.data.get('amount')
-        print("amount 출력", amount)
         url = "https://kapi.kakao.com/v1/payment/ready"
         headers = {
-            'Authorization': "KakaoAK " + "163e47ead36bc85f9b5770c9be7b4a1e",
+            'Authorization': "KakaoAK " + KAKAOPAY_KEY,
             'Content-type': 'application/json',
         }
         params = {
@@ -254,13 +251,12 @@ class GoogleOauthView(viewsets.ViewSet):
         return JsonResponse(response.json())
 
     def ApproveKakaoPay(self, request):
+        KAKAOPAY_KEY = os.getenv('KAKAOPAY_KEY')
         pg_token= request.data.get('pg_token')
         tid= request.data.get('tid')
-        print("피지 토큰 출력",pg_token)
-        print("tid 출력",tid)
         url = "https://kapi.kakao.com/v1/payment/approve"
         headers = {
-            'Authorization': "KakaoAK " + "163e47ead36bc85f9b5770c9be7b4a1e",
+            'Authorization': "KakaoAK " + KAKAOPAY_KEY,
             'Content-type': 'application/json',
         }
         params = {
