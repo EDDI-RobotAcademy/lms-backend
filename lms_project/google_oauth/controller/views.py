@@ -135,8 +135,8 @@ class GoogleOauthView(viewsets.ViewSet):
         try:
             userToken = request.data.get('usertoken')
             accountInfo = self.redisService.getValueByKey(userToken)
-            cherry = accountInfo['cherry']
-            return Response({'cherry': cherry}, status=status.HTTP_200_OK)
+            attendancecherry = accountInfo['attendancecherry']
+            return Response({'attendancecherry': attendancecherry}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error retrieving cherry info:', e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -254,5 +254,22 @@ class GoogleOauthView(viewsets.ViewSet):
         response = requests.post(url, params=params, headers=headers)
         return JsonResponse(response.json())
 
+    def addAttendanceCherry(self, request):
+        try:
+            user_token = request.data.get('usertoken')
+            accountInfo = self.redisService.getValueByKey(user_token)
+            account_id = accountInfo['account_id']
+            addAttendanceCherry = request.data.get('atttendancecherry')
+            atttendancecherry = self.accountService.findAttendance_CherryByAccountId(account_id)
 
 
+            new_attendancecherry_count = attendance_cherry+50
+
+            self.accountService.updateCherryCount(account_id, new_cherry_count)
+
+            accountInfo['cherry'] = new_cherry_count
+            self.redisService.update_cherry_count(user_token, accountInfo)
+            return Response({'cherry': cherry}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error using ticket: {e}")
+            return False, str(e)
