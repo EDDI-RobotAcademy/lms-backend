@@ -259,16 +259,20 @@ class GoogleOauthView(viewsets.ViewSet):
             user_token = request.data.get('usertoken')
             accountInfo = self.redisService.getValueByKey(user_token)
             account_id = accountInfo['account_id']
-            addAttendanceCherry = request.data.get('atttendancecherry')
-            atttendancecherry = self.accountService.findAttendance_CherryByAccountId(account_id)
 
+            # TODO: 출석체리 비교 로직 추가
+            currentAttendanceCherry = request.data.get('atttendancecherry')
+            attendancecherry = self.accountService.findAttendance_CherryByAccountId(account_id)
 
-            new_attendancecherry_count = attendance_cherry+50
+            new_attendancecherry = attendancecherry + 50
 
-            self.accountService.updateCherryCount(account_id, new_cherry_count)
+            # DB에 변동된 체리 개수 업데이트
+            self.accountService.updateAttendanceCherry(account_id, new_attendancecherry)
 
-            accountInfo['cherry'] = new_cherry_count
+            # redis에 변동된 체리 개수 업데이트
+            accountInfo['cherry'] = new_attendancecherry
             self.redisService.update_cherry_count(user_token, accountInfo)
+
             return Response({'cherry': cherry}, status=status.HTTP_200_OK)
         except Exception as e:
             print(f"Error using ticket: {e}")
