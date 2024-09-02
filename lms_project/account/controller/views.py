@@ -1,17 +1,9 @@
-from datetime import datetime, timedelta
-
 import bcrypt
-import jwt
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-
-from account.entity.profile import Profile
 from account.serializers import ProfileSerializer
 from account.service.account_service_impl import AccountServiceImpl
-
-from django.conf import settings
-
 
 class AccountView(viewsets.ViewSet):
     accountService = AccountServiceImpl.getInstance()
@@ -21,7 +13,6 @@ class AccountView(viewsets.ViewSet):
         try:
             email = request.data.get("email")
             isDuplicate = self.accountService.checkEmailDuplication(email)
-            print("Email 이미 존재" if isDuplicate else "Email 사용 가능")
             return Response(
                 {
                     "isDuplicate": isDuplicate
@@ -56,7 +47,6 @@ class AccountView(viewsets.ViewSet):
             serializer = ProfileSerializer(account)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            print("계정 생성 중 에러 발생1:", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def registerSocialAccount(self, request):
@@ -77,7 +67,6 @@ class AccountView(viewsets.ViewSet):
 
     def loginAccount(self, request):
         try:
-            print("settings.SECRET_KEY", settings.SECRET_KEY)
             email = request.data.get("email")
             password = request.data.get("password")
 
@@ -93,11 +82,9 @@ class AccountView(viewsets.ViewSet):
             return Response({"error": "로그인 중 오류 발생"}, status=status.HTTP_400_BAD_REQUEST)
 
     def checkLoginType(self, request):
-        print("checkLoginType()")
         try:
             email = request.data.get("email")
             isLoginType = self.accountService.checkLoginType(email)
-            print("isLoginType", isLoginType)
             return Response(
                 {
                     "isLoginType": isLoginType
@@ -113,7 +100,6 @@ class AccountView(viewsets.ViewSet):
         try:
             nickname = request.data.get("nickname")
             isNickNameDuplicate = self.accountService.checkNickNameDuplication(nickname)
-            print("Nickname 이미 존재" if isNickNameDuplicate else "nickname 사용 가능")
             return Response(
                 {
                     "isNickNameDuplicate": isNickNameDuplicate
@@ -130,9 +116,7 @@ class AccountView(viewsets.ViewSet):
             newpassword = request.data.get("password")
             email = request.data.get("email")
             hashed_password = bcrypt.hashpw(newpassword.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-            print(" 새로운 비밀번호 ", hashed_password)
             success = self.accountService.changePassword(email, hashed_password)
-            print("True" if success else "False")
             return Response(
                 {
                     "success": success
@@ -147,7 +131,6 @@ class AccountView(viewsets.ViewSet):
         try:
             email = request.data.get("email")
             getProfileImg = self.accountService.checkProfileImg(email)
-            print("getProfileImg 출력이 되나요?", getProfileImg)
             return Response(
                 {
                     "getProfileImg": getProfileImg
@@ -159,14 +142,10 @@ class AccountView(viewsets.ViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def setProfileImg(self, request):
-        print("getProfileImg()")
         try:
             email = request.data.get("email")
             img_id = request.data.get("img_id")
-            print("리퀘스트 데이터", request.data)
-            print("img_id 출력",img_id)
             setProfileImg = self.accountService.settingProfileImg(email, img_id)
-            print("setProfileImg", setProfileImg)
             return Response(
                 {
                     "setProfileImg": setProfileImg
@@ -181,7 +160,6 @@ class AccountView(viewsets.ViewSet):
         try:
             email = request.data.get("email")
             getCreateTime = self.accountService.checkAccountCreateTime(email)
-            print("getAccountCreateTime 출력이 되나요?", getCreateTime)
             return Response(
                 {
                     "getCreateTime": getCreateTime
