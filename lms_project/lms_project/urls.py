@@ -22,5 +22,5 @@ urlpatterns = [
     path('board/', include('board.urls')),
     path('account/', include('account.urls')),
     path('google_oauth/', include('google_oauth.urls')),
-    path('recipe/', include('recipe.urls')),
+    path('user_recipe/', include('user_recipe.urls')),
 ]
