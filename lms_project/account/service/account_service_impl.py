@@ -81,6 +81,7 @@ class AccountServiceImpl(AccountService):
         return attendance_cherry
 
     def findAttendance_DateByAccountId(self, accountId):
+        print("findAttendance_DateByAccountId() 접근")
         attendance_date = self.__accountRepository.findAttendance_Date(accountId)
         return attendance_date
 
