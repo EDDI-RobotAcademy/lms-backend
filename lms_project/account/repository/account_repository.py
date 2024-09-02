@@ -33,3 +33,7 @@ class AccountRepository(ABC):
     @abstractmethod
     def updateCherry(self, user_id, new_cherry_count):
         pass
+
+    @abstractmethod
+    def updateAttendanceCherry(self, account_id, new_attendanceCherry):
+        pass

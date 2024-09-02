@@ -57,7 +57,6 @@ class AccountRepositoryImpl(AccountRepository):
         if account.Ticket:
             return account.Ticket  # 대문자 T를 사용
 
-
     def updateTicket(self, user_id, new_ticket_count):
         try:
             account = Account.objects.get(id=user_id)
@@ -88,9 +87,22 @@ class AccountRepositoryImpl(AccountRepository):
             account = Account.objects.get(id=user_id)
             cherry = account.Cherry
             cherry.Cherry = new_cherry_count
-            print("체리점체리 출력",cherry.Cherry)
+            print("체리점체리 출력", cherry.Cherry)
             cherry.save()
             return True
         except Exception as e:
             print(f"Error updating cherry count: {e}")
+            return False
+
+    def updateAttendanceCherry(self, account_id, new_attendanceCherry):
+        try:
+            account = Account.objects.get(id=account_id)
+            attCherry = account.Attendance_cherry
+            attCherry.AttCherry = new_attendanceCherry
+            print(f"출석체크로 지금까지 얻은 체리: {attCherry.AttCherry}")
+            attCherry.save()
+            return True
+
+        except Exception as e:
+            print(f"Error while updating attendance cherry: {e}")
             return False
