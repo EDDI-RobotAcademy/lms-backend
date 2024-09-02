@@ -36,14 +36,11 @@ class GoogleOauthView(viewsets.ViewSet):
     def redisAccessToken(self, request):
         try:
             email = request.data.get('email')
-            print(f"redisAccessToken -> email: {email}")
             account = self.accountService.findAccountByEmail(email)
-            print(account)
             if not account:
                 return Response({'error': 'Account not found'}, status=status.HTTP_404_NOT_FOUND)
 
             userToken = str(uuid.uuid4())
-            print(f"type of account.id: {type(account.id)}")
             ticket = self.accountService.findTicketByAccountId(account.id)
             nickname = self.accountService.findNicknameByAccountId(account.id)
             cherry = self.accountService.findCherryByAccountId(account.id)
@@ -61,17 +58,12 @@ class GoogleOauthView(viewsets.ViewSet):
     def getUserTokenEmailInfo(self, request):
         try:
             userToken = request.data.get('usertoken')
-            print(f"Searching for token: {userToken}")
             stored_data = self.redisService.getValueByKey(userToken)
-            print(f"Stored data: {stored_data}")
 
             if not stored_data:
                 return Response({'error': 'Token not found'}, status=status.HTTP_404_NOT_FOUND)
 
             email = stored_data.get('email', '')
-            account_id = stored_data.get('account_id', '')
-
-            print(f"Account ID: {account_id}, Email: {email}")
 
             return Response({'EmailInfo': email}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -82,7 +74,6 @@ class GoogleOauthView(viewsets.ViewSet):
         try:
             userToken = request.data.get('usertoken')
             accountId = self.redisService.getValueByKey(userToken)
-            print(f"accountId: {accountId}")
             PaidMemberTypeInfo = self.accountService.findPaidMemberTypeByAccountId(accountId)
 
             return Response({'PaidMemberTypeInfo': PaidMemberTypeInfo}, status=status.HTTP_200_OK)
@@ -113,10 +104,8 @@ class GoogleOauthView(viewsets.ViewSet):
     def updateUserTicket(self, request):
         try:
             user_token = request.data.get('usertoken')
-            print("updateUserTicket() 유저토큰", user_token)
             accountInfo = self.redisService.getValueByKey(user_token)
             account_id = accountInfo['account_id']
-            print("updateUserTicket() 어카운트ID", account_id)
 
             ticket = self.accountService.findTicketByAccountId(account_id)
             if ticket <= 0:
@@ -136,9 +125,7 @@ class GoogleOauthView(viewsets.ViewSet):
         try:
             userToken = request.data.get('usertoken')
             accountInfo = self.redisService.getValueByKey(userToken)
-            print(f"accountId 입니다: {accountInfo}")
             cherry = accountInfo['cherry']
-            print("티켓만 출력", cherry)
             return Response({'cherry': cherry}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error retrieving cherry info:', e)
@@ -148,9 +135,7 @@ class GoogleOauthView(viewsets.ViewSet):
         try:
             userToken = request.data.get('usertoken')
             accountInfo = self.redisService.getValueByKey(userToken)
-            print(f"accountId 입니다: {accountInfo}")
             cherry = accountInfo['cherry']
-            print("티켓만 출력", cherry)
             return Response({'cherry': cherry}, status=status.HTTP_200_OK)
         except Exception as e:
             print('Error retrieving cherry info:', e)
