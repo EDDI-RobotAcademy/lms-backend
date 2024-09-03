@@ -80,7 +80,17 @@ class AccountRepositoryImpl(AccountRepository):
 
     def findAttendance_Date(self, accountId):
         account = AccountAttendanceCheck.objects.get(id=accountId)
-        account_attendance_date = [account.Attendance_date1,account.Attendance_date2, account.Attendance_date3]
+        account_attendance_date = [account.Attendance_date1, account.Attendance_date2, account.Attendance_date3,
+                                   account.Attendance_date4, account.Attendance_date5, account.Attendance_date6,
+                                   account.Attendance_date7, account.Attendance_date8, account.Attendance_date9,
+                                   account.Attendance_date10, account.Attendance_date11, account.Attendance_date12,
+                                   account.Attendance_date13, account.Attendance_date14, account.Attendance_date15,
+                                   account.Attendance_date16, account.Attendance_date17, account.Attendance_date18,
+                                   account.Attendance_date19, account.Attendance_date20, account.Attendance_date21,
+                                   account.Attendance_date22, account.Attendance_date23, account.Attendance_date24,
+                                   account.Attendance_date25, account.Attendance_date26, account.Attendance_date27,
+                                   account.Attendance_date28, account.Attendance_date29, account.Attendance_date30,
+                                   account.Attendance_date31]
         print("출력 ", account_attendance_date)
         return account_attendance_date
 
