@@ -22,3 +22,7 @@ class RedisService(ABC):
     @abstractmethod
     def update_attendance_cherry_count(self, user_token, accountInfo):
         pass
+
+    @abstractmethod
+    def get_account_id_by_usertoken(self, userToken):
+        pass

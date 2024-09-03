@@ -121,3 +121,17 @@ class RedisServiceImpl(RedisService):
         except Exception as e:
             print(f"Error updating attendance cherry in redis: {e}")
             return False
+
+    def get_account_id_by_usertoken(self, userToken):
+        try:
+            account_info = self.getValueByKey(userToken)
+            if not account_info:
+                print(f"User token not found: {userToken}")
+                return None
+
+            account_id = account_info.get('account_id')
+            return account_id if account_id else False
+
+        except Exception as e:
+            print(f"Error retrieving account_id from Redis: {e}")
+            return False
