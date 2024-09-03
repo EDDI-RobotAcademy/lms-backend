@@ -80,7 +80,7 @@ class AccountRepositoryImpl(AccountRepository):
 
     def findAttendance_Date(self, accountId):
         account = AccountAttendanceCheck.objects.get(id=accountId)
-        account_attendance_date = [account.Attendance_date1, account.Attendance_date2, account.Attendance_date3,
+        account_attendance_date = [account.Attendance_cherry, account.Attendance_date1, account.Attendance_date2, account.Attendance_date3,
                                    account.Attendance_date4, account.Attendance_date5, account.Attendance_date6,
                                    account.Attendance_date7, account.Attendance_date8, account.Attendance_date9,
                                    account.Attendance_date10, account.Attendance_date11, account.Attendance_date12,
@@ -109,9 +109,9 @@ class AccountRepositoryImpl(AccountRepository):
     def updateAttendanceCherry(self, account_id, new_attendanceCherry):
         try:
             account = Account.objects.get(id=account_id)
-            attCherry = account.Attendance_cherry
-            attCherry.AttCherry = new_attendanceCherry
-            print(f"출석체크로 지금까지 얻은 체리: {attCherry.AttCherry}")
+            attCherry = account.AttendanceCheck
+            attCherry.Attendance_cherry = new_attendanceCherry
+            print(f"출석체크로 지금까지 얻은 체리: {attCherry.Attendance_cherry}")
             attCherry.save()
             return True
 
