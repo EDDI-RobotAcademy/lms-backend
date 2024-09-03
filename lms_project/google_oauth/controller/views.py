@@ -282,7 +282,7 @@ class GoogleOauthView(viewsets.ViewSet):
 
     def getAccountIdFromUserToken(self, request):
         try:
-            userToken = request.data.get('usertoken')
+            userToken = request.data.get('userToken')
             if not userToken:
                 return Response({'error': '사용자 토큰이 필요합니다'}, status=status.HTTP_400_BAD_REQUEST)
 
