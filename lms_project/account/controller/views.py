@@ -5,8 +5,12 @@ from rest_framework.response import Response
 from account.serializers import ProfileSerializer
 from account.service.account_service_impl import AccountServiceImpl
 
+from google_oauth.service.redis_service_impl import RedisServiceImpl
+
+
 class AccountView(viewsets.ViewSet):
     accountService = AccountServiceImpl.getInstance()
+    redisService = RedisServiceImpl.getInstance()
 
     def checkEmailDuplication(self, request):
         print("checkEmailDuplication()")
@@ -169,3 +173,21 @@ class AccountView(viewsets.ViewSet):
         except Exception as e:
             print("getCreateTime 중 에러 발생:", e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def getAttendanceDateList(self, request):
+        try:
+            print(request.data)
+            user_token = request.data.get('usertoken')
+            print("user_token 가져오기:", user_token)
+            accountInfo = self.redisService.getValueByKey(user_token)
+            print('현재 accountInfo:', accountInfo)
+            account_id = accountInfo['account_id']
+            print('이 유저의 유저 id 반환:', account_id)
+
+            attendanceDateList = self.accountService.findAttendance_DateByAccountId(account_id)
+            print('반환 예정인 부분:', {'attendanceDateList': attendanceDateList})
+            return Response({'attendanceDateList': attendanceDateList}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(f"Error get user's Attendance Date List:{e}")
+            return False, str(e)
