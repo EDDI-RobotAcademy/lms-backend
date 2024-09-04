@@ -24,5 +24,9 @@ class RedisService(ABC):
         pass
 
     @abstractmethod
+    def update_attendance_status(self, user_token, account_attendance_status, today):
+        pass
+
+    @abstractmethod
     def get_account_id_by_usertoken(self, userToken):
         pass
