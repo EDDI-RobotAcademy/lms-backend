@@ -106,5 +106,6 @@ class AccountServiceImpl(AccountService):
         return CreateTime
 
     def updateAttendanceCherry(self, account_id, new_attendanceCherry):
+        print(f"updateAttendanceCherry: {account_id}, {new_attendanceCherry}")
         self.__accountRepository.updateAttendanceCherry(account_id, new_attendanceCherry)
         return True
