@@ -25,6 +25,28 @@ class RedisServiceImpl(RedisService):
             cls.__instance = cls()
         return cls.__instance
 
+    def store_double_key_value(self, key, internalKey, value):
+        try:
+            # Redis 해시에서 특정 날짜의 출석 상태를 저장
+            self.redis_client.hset(key, internalKey, int(value))
+        except Exception as e:
+            print('Error storing attendance in Redis:', e)
+            raise e
+
+    def double_key_value_list(self, key):
+        try:
+            # Redis 해시에서 전체 출석 상태를 조회
+            attendanceData = self.redis_client.hgetall(key)
+            if not attendanceData:
+                return [0] * 31
+            # 전체 출석 상태 리스트로 변환
+            # Redis에서 가져온 값은 바이트 형태이므로, 변환이 필요함
+            attendanceList = [bool(int(attendanceData.get(str(day), 0))) for day in range(1, 32)]
+            return attendanceList
+        except Exception as e:
+            print('Error retrieving attendance list from Redis:', e)
+            raise e
+
     def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry,
                            attendance_date):
         try:
