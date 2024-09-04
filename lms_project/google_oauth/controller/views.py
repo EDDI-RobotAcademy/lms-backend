@@ -258,22 +258,16 @@ class GoogleOauthView(viewsets.ViewSet):
         try:
             print(request)
             user_token = request.data.get('usertoken')
-            print("user_token 출력",user_token)
             accountInfo = self.redisService.getValueByKey(user_token)
-            print("이전 어카운트 인포", accountInfo)
             account_id = accountInfo['account_id']
 
             attendanceCherry = self.accountService.findAttendance_CherryByAccountId(account_id)
             attendanceCherry += 50
-            print("1번동작 성공: 현재 출석 체리 가져오기 및 출석으로 인한 체리 추가")
 
             self.accountService.updateAttendanceCherry(account_id, attendanceCherry)
-            print('2번동작 성공: sql에 변화된 체리 저장하기.')
 
             accountInfo['attendance_cherry'] = attendanceCherry
             self.redisService.update_attendance_cherry_count(user_token, accountInfo)
-            print('마지막 동작 성공: 레디스에 변화된 체리 저장하기.')
-            print(f"전체 구동 성공: 이후 사용자의 정보->{accountInfo}")
 
             return Response({'attendence_cherry': attendanceCherry}, status=status.HTTP_200_OK)
         except Exception as e:

@@ -190,4 +190,26 @@ class AccountView(viewsets.ViewSet):
 
         except Exception as e:
             print(f"Error get user's Attendance Date List:{e}")
-            return False, str(e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def updateAttendanceDateList(self, request):
+        try:
+            user_token = request.data.get('usertoken')
+            print(user_token)
+            today = request.data.get('today')
+            accountInfo = self.redisService.getValueByKey(user_token)
+            account_id = accountInfo['account_id']
+
+
+            account_attendance_status_list = self.accountService.findAttendance_DateByAccountId(account_id)
+            account_attendance_status = account_attendance_status_list[today-1]
+            account_attendance_status_list[today-1] = 1
+            updatedAccountAttendanceStatus = account_attendance_status_list
+            account_attendance_status = 1
+
+            self.accountService.updateAttendanceStatus(account_id, account_attendance_status, today)
+            self.redisService.update_attendance_status(user_token, account_attendance_status, today)
+            return Response({'attendance_status': updatedAccountAttendanceStatus}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"error while updating attendance date list:{e}")
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

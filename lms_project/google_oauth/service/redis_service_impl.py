@@ -122,6 +122,15 @@ class RedisServiceImpl(RedisService):
             print(f"Error updating attendance cherry in redis: {e}")
             return False
 
+    def update_attendance_status(self, user_token, account_attendance_status, today):
+        try:
+            self.redis_client.hset(user_token, f'attendance_date{today}', account_attendance_status)
+            return True
+
+        except Exception as e:
+            print(f"Error updating attendance date status in redis: {e}")
+            return False
+
     def get_account_id_by_usertoken(self, userToken):
         try:
             account_info = self.getValueByKey(userToken)
