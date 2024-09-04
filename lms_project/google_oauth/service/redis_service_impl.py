@@ -144,3 +144,10 @@ class RedisServiceImpl(RedisService):
         except Exception as e:
             print(f"Error retrieving account_id from Redis: {e}")
             return False
+
+    def store_with_ttl(self, key, value, ttl):
+        try:
+            self.redis_client.set(key, value, ex=ttl)
+        except Exception as e:
+            print(f"Error storing value in Redis with TTL: {e}")
+            raise e
