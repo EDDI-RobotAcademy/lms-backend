@@ -10,4 +10,7 @@ urlpatterns = [
     path('attendance-list',
          AttendanceView.as_view({'post': 'attendanceList'}),
          name='attendanceList'),
+    path('mark-attendance',
+         AttendanceView.as_view({'post': 'markAttendance'}),
+         name='markAttendance'),
 ]

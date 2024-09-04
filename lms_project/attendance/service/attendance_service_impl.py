@@ -19,6 +19,6 @@ class AttendanceServiceImpl(AttendanceService):
 
         return cls.__instance
 
-    def findTodayForAttendance(self):
+    def markAttendance(self):
         pass
     

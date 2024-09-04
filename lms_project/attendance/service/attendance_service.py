@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 
 class AttendanceService(ABC):
     @abstractmethod
-    def findTodayForAttendance(self):
+    def markAttendance(self):
         pass
