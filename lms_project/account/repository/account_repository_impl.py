@@ -109,6 +109,7 @@ class AccountRepositoryImpl(AccountRepository):
     def updateAttendanceCherry(self, account_id, new_attendanceCherry):
         try:
             account = Account.objects.get(id=account_id)
+            print(f"updateAttendanceCherry -> account: {account}")
             attCherry = account.AttendanceCheck
             attCherry.Attendance_cherry = new_attendanceCherry
             print("지금까지 출석으로 얻은 체리", new_attendanceCherry)

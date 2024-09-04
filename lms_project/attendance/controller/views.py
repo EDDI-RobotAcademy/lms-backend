@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
+from account.service.account_service_impl import AccountServiceImpl
 from attendance.service.attendance_service_impl import AttendanceServiceImpl
 # ??????? google_oauth ???????
 from google_oauth.service.redis_service_impl import RedisServiceImpl
@@ -12,6 +13,7 @@ from google_oauth.service.redis_service_impl import RedisServiceImpl
 class AttendanceView(viewsets.ViewSet):
     attendanceService = AttendanceServiceImpl.getInstance()
     redisService = RedisServiceImpl.getInstance()
+    accountService = AccountServiceImpl.getInstance()
 
     def attendanceList(self, request):
         try:
@@ -35,10 +37,16 @@ class AttendanceView(viewsets.ViewSet):
             day = request.data.get('today')
             print(f"day: {day}")
             accountInfo = self.redisService.getValueByKey(user_token)
-            account_id = accountInfo['account_id']
+            accountId = accountInfo['account_id']
 
-            self.redisService.store_double_key_value(account_id, day, True)
-            return Response({'attendanceDateList': True}, status=status.HTTP_200_OK)
+            self.redisService.store_double_key_value(accountId, day)
+
+            attendanceCherry = self.accountService.findCherryByAccountId(accountId)
+            print(f"attendance cherry: {attendanceCherry}")
+            attendanceCherry += 50
+
+            self.accountService.updateAttendanceCherry(accountId, attendanceCherry)
+            return Response({'attendanceDateList': attendanceCherry}, status=status.HTTP_200_OK)
 
         except Exception as e:
             print(f"Error get user's Attendance:{e}")
