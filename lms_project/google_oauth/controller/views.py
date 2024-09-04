@@ -289,3 +289,30 @@ class GoogleOauthView(viewsets.ViewSet):
         except Exception as e:
             print(f"account_id를 검색하는 중 오류가 발생했습니다.: {e}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def saveRecipeToRedis(self, request):
+        try:
+            account_id = request.data.get('accountId')
+            user_recipe_id = request.data.get('userRecipeId')
+            recipe = request.data.get('recipe')
+
+            # 로그로 데이터 확인
+            print(f"account_id: {account_id}, user_recipe_id: {user_recipe_id}, recipe: {recipe}")
+
+            if not account_id or not user_recipe_id or not recipe:
+                return Response({"error": "account_id, user_recipe_id, and recipe are required"},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            # Redis 키 구성
+            redis_key = f"account_id:{account_id}, recipe_id:{user_recipe_id}"
+            redis_value = recipe
+
+            # Redis에 저장, 3일간 ttl
+            self.redisService.store_with_ttl(redis_key, redis_value, 259200)
+
+            return Response({"message": "Recipe successfully saved to Redis"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(f"Error saving recipe to Redis: {e}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+

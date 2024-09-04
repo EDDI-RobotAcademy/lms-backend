@@ -24,4 +24,5 @@ urlpatterns = [
     path('approveKakaoPay',GoogleOauthView.as_view({'post': 'ApproveKakaoPay'}),name='approvekakaoPay-test'),
     path('redis-add-attendancecherry',GoogleOauthView.as_view({'post': 'addAttendanceCherry'}),name='redis-add-attendancecherry'),
     path('redis-get-account-id', GoogleOauthView.as_view({'post': 'getAccountIdFromUserToken'}), name='redis-get-account-id'),
+    path('save-recipe-to-redis', GoogleOauthView.as_view({'post': 'saveRecipeToRedis'}), name='save-recipe-to-redis'),
 ]

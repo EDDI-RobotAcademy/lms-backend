@@ -30,3 +30,6 @@ class RedisService(ABC):
     @abstractmethod
     def get_account_id_by_usertoken(self, userToken):
         pass
+    @abstractmethod
+    def store_with_ttl(self, key, value, ttl):
+        pass
