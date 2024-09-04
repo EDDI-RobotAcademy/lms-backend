@@ -39,6 +39,8 @@ class AttendanceView(viewsets.ViewSet):
             accountInfo = self.redisService.getValueByKey(user_token)
             accountId = accountInfo['account_id']
 
+            self.redisService.store_double_key_value(accountId, day)
+
             attendanceCherry = self.accountService.findCherryByAccountId(accountId)
             print(f"attendance cherry: {attendanceCherry}")
             attendanceCherry += 50
