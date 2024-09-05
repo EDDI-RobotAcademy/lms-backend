@@ -1,15 +1,16 @@
 from abc import ABC, abstractmethod
 
+
 class UserRecipeService(ABC):
 
     @abstractmethod
-    def createUserRecipe(self, accountId):
+    def createUserRecipe(self, account_id: int, recipe_hash: str):
         pass
 
     @abstractmethod
-    def getUserRecipe(self, accountId, userRecipeId):
+    def getUserRecipeByAccountIdAndRecipeHash(self, account_id: int, recipe_hash: str):
         pass
 
     @abstractmethod
-    def deleteUserRecipe(self, accountId, userRecipeId):
+    def deleteUserRecipeByAccountIdAndRecipeHash(self, account_id: int, recipe_hash: str):
         pass

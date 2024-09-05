@@ -2,49 +2,53 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from user_recipe.service.user_recipe_service_impl import UserRecipeServiceImpl
 
-class UserRecipeView(viewsets.ViewSet):
-    userRecipeService = UserRecipeServiceImpl.getInstance()
+user_recipe_service = UserRecipeServiceImpl.getInstance()
 
-    def createUserRecipe(self, request):
-        try:
-            accountId = request.data.get("accountId")
 
-            if not accountId:
-                return Response({"error": "accountId is required"}, status=status.HTTP_400_BAD_REQUEST)
-            print(f"Received accountId: {accountId}")
+class UserRecipeViewSet(viewsets.ViewSet):
+    user_recipe_service = UserRecipeServiceImpl.getInstance()
+    def create(self, request):
+        account_id = request.data.get('accountId')
+        recipe_hash = request.data.get('recipeHash')
 
-            userRecipeId = self.userRecipeService.createUserRecipe(accountId)
-            return Response({"userRecipeId": userRecipeId.user_recipe_id}, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        result = user_recipe_service.createUserRecipe(account_id, recipe_hash)
 
-    def getUserRecipe(self, request):
-        try:
-            accountId = request.query_params.get("accountId")
-            userRecipeId = request.query_params.get("userRecipeId")
+        if result:
+            return Response({"message": "레시피 저장 완료"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "중복된 레시피입니다."}, status=status.HTTP_409_CONFLICT)
 
-            if not accountId or not userRecipeId:
-                return Response({"error": "accountId and userRecipeId are required"}, status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self, request, pk=None):
+        account_id = request.query_params.get('accountId')
+        recipe_hash = request.query_params.get('recipeHash')
 
-            userRecipeIdInstance = self.userRecipeService.getUserRecipe(accountId, userRecipeId)
-            return Response({
-                "accountId": userRecipeIdInstance.account_id,
-                "userRecipeId": userRecipeIdInstance.user_recipe_id,
-            }, status=status.HTTP_200_OK)
-        except UserRecipe.DoesNotExist:
-            return Response({"error": "Recipe not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        recipe = user_recipe_service.getUserRecipeByAccountIdAndRecipeHash(account_id, recipe_hash)
 
-    def deleteUserRecipe(self, request):
-        try:
-            accountId = request.data.get("accountId")
-            userRecipeId = request.data.get("userRecipeId")
+        if recipe:
+            return Response({"recipe": recipe}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "레시피가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
 
-            if not accountId or not userRecipeId:
-                return Response({"error": "accountId and userRecipeId are required"}, status=status.HTTP_400_BAD_REQUEST)
+    def destroy(self, request, pk=None):
+        account_id = request.data.get('accountId')
+        recipe_hash = request.data.get('recipeHash')
 
-            self.userRecipeService.deleteUserRecipe(accountId, userRecipeId)
-            return Response({"message": "Recipe deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        result = user_recipe_service.deleteUserRecipeByAccountIdAndRecipeHash(account_id, recipe_hash)
+
+        if result:
+            return Response({"message": "레시피 삭제 완료"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "레시피 삭제 실패"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 추가된 메서드 (레시피 중복 확인)
+    def checkRecipeDuplication(self, request):
+        account_id = request.data.get('accountId')
+        recipe_hash = request.data.get('recipeHash')
+
+        # 중복 확인을 위해 서비스 레이어 호출
+        existing_recipe = user_recipe_service.getUserRecipeByAccountIdAndRecipeHash(account_id, recipe_hash)
+
+        if existing_recipe:
+            return Response({"message": "중복된 레시피입니다."}, status=status.HTTP_409_CONFLICT)
+        else:
+            return Response({"message": "중복되지 않은 레시피입니다."}, status=status.HTTP_200_OK)
