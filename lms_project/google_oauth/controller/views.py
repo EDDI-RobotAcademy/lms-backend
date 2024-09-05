@@ -45,10 +45,10 @@ class GoogleOauthView(viewsets.ViewSet):
             nickname = self.accountService.findNicknameByAccountId(account.id)
             cherry = self.accountService.findCherryByAccountId(account.id)
             attendance_cherry = self.accountService.findAttendance_CherryByAccountId(account.id)
-            attendance_date = self.accountService.findAttendance_DateByAccountId(account.id)
+            attendance_monthly_check = self.accountService.findAttendance_DateByAccountId(account.id)
 
             self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket, cherry,
-                                                 attendance_cherry, attendance_date)
+                                                 attendance_cherry, attendance_monthly_check)
 
             return Response({'userToken': userToken}, status=status.HTTP_200_OK)
         except Exception as e:
