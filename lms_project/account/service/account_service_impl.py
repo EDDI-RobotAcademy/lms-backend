@@ -110,6 +110,6 @@ class AccountServiceImpl(AccountService):
         self.__accountRepository.updateAttendanceCherry(account_id, new_attendanceCherry)
         return True
 
-    def updateAttendanceStatus(self, account_id, account_attendance_status, today):
-        self.__accountRepository.updateAttendanceStatus(account_id, account_attendance_status, today)
-        return True
+    def setNewMonth(self, account_id, account_month_info):
+        print("setNewMonth()-> setting new month info")
+        self.__accountRepository.setNewMonth(account_id, account_month_info)

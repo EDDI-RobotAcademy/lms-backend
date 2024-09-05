@@ -89,5 +89,5 @@ class AccountService(ABC):
         pass
 
     @abstractmethod
-    def updateAttendanceStatus(self, account_id, account_attendance_status, today):
+    def setNewMonth(self, account_id, account_month_info):
         pass

@@ -80,17 +80,7 @@ class AccountRepositoryImpl(AccountRepository):
 
     def findAttendance_Date(self, accountId):
         account = AccountAttendanceCheck.objects.get(id=accountId)
-        account_attendance_date = [account.Attendance_date1, account.Attendance_date2,
-                                   account.Attendance_date3, account.Attendance_date4, account.Attendance_date5,
-                                   account.Attendance_date6, account.Attendance_date7, account.Attendance_date8,
-                                   account.Attendance_date9, account.Attendance_date10,
-                                   account.Attendance_date11, account.Attendance_date12, account.Attendance_date13,
-                                   account.Attendance_date14, account.Attendance_date15, account.Attendance_date16,
-                                   account.Attendance_date17, account.Attendance_date18, account.Attendance_date19,
-                                   account.Attendance_date20, account.Attendance_date21, account.Attendance_date22,
-                                   account.Attendance_date23, account.Attendance_date24, account.Attendance_date25,
-                                   account.Attendance_date26, account.Attendance_date27, account.Attendance_date28,
-                                   account.Attendance_date29, account.Attendance_date30, account.Attendance_date31]
+        account_attendance_date = account.Attendance_monthly_check
         print("출력 ", account_attendance_date)
         return account_attendance_date
 
@@ -120,15 +110,16 @@ class AccountRepositoryImpl(AccountRepository):
             print(f"Error while updating attendance cherry: {e}")
             return False
 
-    def updateAttendanceStatus(self, account_id, account_attendance_status, today):
+    def setNewMonth(self, account_id, account_month_info):
         try:
-            account = Account.objects.get(id=account_id)
-            attStatus = account.AttendanceCheck
-            # TODO 변수명 동적 할당
-            td = locals()['Attendance_date{}'.format(today)]
-            attStatus.td = account_attendance_status
-            attStatus.save()
+            current_account = Account.objects.get(id=account_id)
+            print(f"current account month info: {current_account}")
+            current_account_month_info = current_account.AttendanceCheck
+            current_account_month_info.Attendance_monthly_check = account_month_info
+            print(f"setup done: {current_account_month_info}")
+            current_account_month_info.save()
             return True
+
         except Exception as e:
-            print(f"Error while update attendance date status: {e}")
+            print(f"Error while updating attendance month info: {e}")
             return False

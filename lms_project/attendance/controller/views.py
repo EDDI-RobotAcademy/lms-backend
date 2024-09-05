@@ -18,8 +18,17 @@ class AttendanceView(viewsets.ViewSet):
     def attendanceList(self, request):
         try:
             user_token = request.data.get('usertoken')
+            current_month = request.data.get('month')
+            print(f"current_month: {current_month}")
             accountInfo = self.redisService.getValueByKey(user_token)
             account_id = accountInfo['account_id']
+            accountMonthInfo = self.accountService.findAttendance_DateByAccountId(account_id)
+            print(f"user's_month: {accountMonthInfo}")
+
+            if current_month != accountMonthInfo:
+                print("초기화 로직 진입 성공")
+                self.accountService.setNewMonth(account_id, current_month)
+                self.redisService.reinit_double_key_value(account_id)
 
             attendanceList = self.redisService.double_key_value_list(account_id)
             print(f"attendance list: {attendanceList}")

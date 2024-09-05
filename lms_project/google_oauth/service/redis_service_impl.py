@@ -25,6 +25,14 @@ class RedisServiceImpl(RedisService):
             cls.__instance = cls()
         return cls.__instance
 
+    def reinit_double_key_value(self, key):
+        try:
+            for i in range(1, 32):
+                self.redis_client.hset(key, i, int(False))
+        except Exception as e:
+            print("Error reinitializing attendance in redis", e)
+            raise e
+
     def store_double_key_value(self, key, internalKey):
         try:
             print(f"store_double_key_value -> key: {key}")
@@ -42,8 +50,7 @@ class RedisServiceImpl(RedisService):
             print('Error retrieving attendance list from Redis:', e)
             raise e
 
-    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry,
-                           attendance_date):
+    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry):
         try:
             self.redis_client.hset(userToken, 'account_id', str(account_id))
             self.redis_client.hset(userToken, 'nickname', nickname)
@@ -51,37 +58,6 @@ class RedisServiceImpl(RedisService):
             self.redis_client.hset(userToken, 'ticket', ticket)
             self.redis_client.hset(userToken, 'cherry', cherry)
             self.redis_client.hset(userToken, 'attendance_cherry', attendance_cherry)
-            self.redis_client.hset(userToken, 'attendance_date1', attendance_date[0])
-            self.redis_client.hset(userToken, 'attendance_date2', attendance_date[1])
-            self.redis_client.hset(userToken, 'attendance_date3', attendance_date[2])
-            self.redis_client.hset(userToken, 'attendance_date4', attendance_date[3])
-            self.redis_client.hset(userToken, 'attendance_date5', attendance_date[4])
-            self.redis_client.hset(userToken, 'attendance_date6', attendance_date[5])
-            self.redis_client.hset(userToken, 'attendance_date7', attendance_date[6])
-            self.redis_client.hset(userToken, 'attendance_date8', attendance_date[7])
-            self.redis_client.hset(userToken, 'attendance_date9', attendance_date[8])
-            self.redis_client.hset(userToken, 'attendance_date10', attendance_date[9])
-            self.redis_client.hset(userToken, 'attendance_date11', attendance_date[10])
-            self.redis_client.hset(userToken, 'attendance_date12', attendance_date[11])
-            self.redis_client.hset(userToken, 'attendance_date13', attendance_date[12])
-            self.redis_client.hset(userToken, 'attendance_date14', attendance_date[13])
-            self.redis_client.hset(userToken, 'attendance_date15', attendance_date[14])
-            self.redis_client.hset(userToken, 'attendance_date16', attendance_date[15])
-            self.redis_client.hset(userToken, 'attendance_date17', attendance_date[16])
-            self.redis_client.hset(userToken, 'attendance_date18', attendance_date[17])
-            self.redis_client.hset(userToken, 'attendance_date19', attendance_date[18])
-            self.redis_client.hset(userToken, 'attendance_date20', attendance_date[19])
-            self.redis_client.hset(userToken, 'attendance_date21', attendance_date[20])
-            self.redis_client.hset(userToken, 'attendance_date22', attendance_date[21])
-            self.redis_client.hset(userToken, 'attendance_date23', attendance_date[22])
-            self.redis_client.hset(userToken, 'attendance_date24', attendance_date[23])
-            self.redis_client.hset(userToken, 'attendance_date25', attendance_date[24])
-            self.redis_client.hset(userToken, 'attendance_date26', attendance_date[25])
-            self.redis_client.hset(userToken, 'attendance_date27', attendance_date[26])
-            self.redis_client.hset(userToken, 'attendance_date28', attendance_date[27])
-            self.redis_client.hset(userToken, 'attendance_date29', attendance_date[28])
-            self.redis_client.hset(userToken, 'attendance_date30', attendance_date[29])
-            self.redis_client.hset(userToken, 'attendance_date31', attendance_date[30])
         except Exception as e:
             print('Error storing access token in Redis:', e)
             raise e

@@ -3,8 +3,7 @@ from abc import ABC, abstractmethod
 
 class RedisService(ABC):
     @abstractmethod
-    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry,
-                           attendance_date):
+    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry):
         pass
 
     @abstractmethod

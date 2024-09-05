@@ -45,10 +45,9 @@ class GoogleOauthView(viewsets.ViewSet):
             nickname = self.accountService.findNicknameByAccountId(account.id)
             cherry = self.accountService.findCherryByAccountId(account.id)
             attendance_cherry = self.accountService.findAttendance_CherryByAccountId(account.id)
-            attendance_date = self.accountService.findAttendance_DateByAccountId(account.id)
 
             self.redisService.store_access_token(userToken, str(account.id), nickname, email, ticket, cherry,
-                                                 attendance_cherry, attendance_date)
+                                                 attendance_cherry)
 
             return Response({'userToken': userToken}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -253,26 +252,6 @@ class GoogleOauthView(viewsets.ViewSet):
         }
         response = requests.post(url, params=params, headers=headers)
         return JsonResponse(response.json())
-
-    def addAttendanceCherry(self, request):
-        try:
-            print(request)
-            user_token = request.data.get('usertoken')
-            accountInfo = self.redisService.getValueByKey(user_token)
-            account_id = accountInfo['account_id']
-
-            attendanceCherry = self.accountService.findAttendance_CherryByAccountId(account_id)
-            attendanceCherry += 50
-
-            self.accountService.updateAttendanceCherry(account_id, attendanceCherry)
-
-            accountInfo['attendance_cherry'] = attendanceCherry
-            self.redisService.update_attendance_cherry_count(user_token, accountInfo)
-
-            return Response({'attendence_cherry': attendanceCherry}, status=status.HTTP_200_OK)
-        except Exception as e:
-            print(f"Error using ticket: {e}")
-            return False, str(e)
 
     def getAccountIdFromUserToken(self, request):
         try:
