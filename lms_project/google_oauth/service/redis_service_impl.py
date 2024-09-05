@@ -25,6 +25,14 @@ class RedisServiceImpl(RedisService):
             cls.__instance = cls()
         return cls.__instance
 
+    def reinit_double_key_value(self, key):
+        try:
+            for i in range(1, 32):
+                self.redis_client.hset(key, i, int(False))
+        except Exception as e:
+            print("Error reinitializing attendance in redis", e)
+            raise e
+
     def store_double_key_value(self, key, internalKey):
         try:
             print(f"store_double_key_value -> key: {key}")
@@ -42,8 +50,7 @@ class RedisServiceImpl(RedisService):
             print('Error retrieving attendance list from Redis:', e)
             raise e
 
-    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry,
-                           attendance_monthly_check):
+    def store_access_token(self, userToken, account_id, nickname, email, ticket, cherry, attendance_cherry):
         try:
             self.redis_client.hset(userToken, 'account_id', str(account_id))
             self.redis_client.hset(userToken, 'nickname', nickname)
@@ -51,7 +58,6 @@ class RedisServiceImpl(RedisService):
             self.redis_client.hset(userToken, 'ticket', ticket)
             self.redis_client.hset(userToken, 'cherry', cherry)
             self.redis_client.hset(userToken, 'attendance_cherry', attendance_cherry)
-            self.redis_client.hset(userToken, 'attendance_monthly_check', attendance_monthly_check)
         except Exception as e:
             print('Error storing access token in Redis:', e)
             raise e

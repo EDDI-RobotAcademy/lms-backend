@@ -109,3 +109,17 @@ class AccountRepositoryImpl(AccountRepository):
         except Exception as e:
             print(f"Error while updating attendance cherry: {e}")
             return False
+
+    def setNewMonth(self, account_id, account_month_info):
+        try:
+            current_account = Account.objects.get(id=account_id)
+            print(f"current account month info: {current_account}")
+            current_account_month_info = current_account.AttendanceCheck
+            current_account_month_info.Attendance_monthly_check = account_month_info
+            print(f"setup done: {current_account_month_info}")
+            current_account_month_info.save()
+            return True
+
+        except Exception as e:
+            print(f"Error while updating attendance month info: {e}")
+            return False

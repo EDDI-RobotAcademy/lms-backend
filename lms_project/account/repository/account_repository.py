@@ -37,3 +37,7 @@ class AccountRepository(ABC):
     @abstractmethod
     def updateAttendanceCherry(self, account_id, new_attendanceCherry):
         pass
+
+    @abstractmethod
+    def setNewMonth(self, account_id, account_month_info):
+        pass

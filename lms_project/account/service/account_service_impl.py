@@ -109,3 +109,7 @@ class AccountServiceImpl(AccountService):
         print(f"updateAttendanceCherry: {account_id}, {new_attendanceCherry}")
         self.__accountRepository.updateAttendanceCherry(account_id, new_attendanceCherry)
         return True
+
+    def setNewMonth(self, account_id, account_month_info):
+        print("setNewMonth()-> setting new month info")
+        self.__accountRepository.setNewMonth(account_id, account_month_info)
