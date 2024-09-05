@@ -254,26 +254,6 @@ class GoogleOauthView(viewsets.ViewSet):
         response = requests.post(url, params=params, headers=headers)
         return JsonResponse(response.json())
 
-    def addAttendanceCherry(self, request):
-        try:
-            print(request)
-            user_token = request.data.get('usertoken')
-            accountInfo = self.redisService.getValueByKey(user_token)
-            account_id = accountInfo['account_id']
-
-            attendanceCherry = self.accountService.findAttendance_CherryByAccountId(account_id)
-            attendanceCherry += 50
-
-            self.accountService.updateAttendanceCherry(account_id, attendanceCherry)
-
-            accountInfo['attendance_cherry'] = attendanceCherry
-            self.redisService.update_attendance_cherry_count(user_token, accountInfo)
-
-            return Response({'attendence_cherry': attendanceCherry}, status=status.HTTP_200_OK)
-        except Exception as e:
-            print(f"Error using ticket: {e}")
-            return False, str(e)
-
     def getAccountIdFromUserToken(self, request):
         try:
             userToken = request.data.get('userToken')

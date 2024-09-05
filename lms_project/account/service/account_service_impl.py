@@ -109,7 +109,3 @@ class AccountServiceImpl(AccountService):
         print(f"updateAttendanceCherry: {account_id}, {new_attendanceCherry}")
         self.__accountRepository.updateAttendanceCherry(account_id, new_attendanceCherry)
         return True
-
-    def updateAttendanceStatus(self, account_id, account_attendance_status, today):
-        self.__accountRepository.updateAttendanceStatus(account_id, account_attendance_status, today)
-        return True

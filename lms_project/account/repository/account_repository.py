@@ -37,7 +37,3 @@ class AccountRepository(ABC):
     @abstractmethod
     def updateAttendanceCherry(self, account_id, new_attendanceCherry):
         pass
-
-    @abstractmethod
-    def updateAttendanceStatus(self, account_id, account_attendance_status, today):
-        pass

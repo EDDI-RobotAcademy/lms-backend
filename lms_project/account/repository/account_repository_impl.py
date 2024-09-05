@@ -109,16 +109,3 @@ class AccountRepositoryImpl(AccountRepository):
         except Exception as e:
             print(f"Error while updating attendance cherry: {e}")
             return False
-
-    def updateAttendanceStatus(self, account_id, account_attendance_status, today):
-        try:
-            account = Account.objects.get(id=account_id)
-            attStatus = account.AttendanceCheck
-            # TODO 변수명 동적 할당
-            td = locals()['Attendance_date{}'.format(today)]
-            attStatus.td = account_attendance_status
-            attStatus.save()
-            return True
-        except Exception as e:
-            print(f"Error while update attendance date status: {e}")
-            return False

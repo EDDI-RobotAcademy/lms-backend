@@ -29,7 +29,4 @@ urlpatterns = [
     path('account-create-time',
          AccountView.as_view({'post': 'getAccountCreateTime'}),
          name='account-set-profile-img'),
-    path('get-account-date-list', AccountView.as_view({'post': 'getAttendanceDateList'}), name='get-account-date-list'),
-    path('update-attendance-date-list', AccountView.as_view({'post': 'updateAttendanceDateList'}),
-         name='update-attendance-date-list'),
 ]
