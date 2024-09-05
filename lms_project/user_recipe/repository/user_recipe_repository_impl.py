@@ -17,19 +17,20 @@ class UserRecipeRepositoryImpl(UserRecipeRepository):
 
     def findLastRecipeByAccountId(self, accountId):
         try:
-            lastRecipe = UserRecipe.objects.filter(account_id=accountId).order_by('-user_recipe_id').first()
+            lastRecipe = UserRecipe.objects.filter(account_id=accountId).order_by('-recipe_hash').first()  # recipe_hash 사용
             print(f"Last recipe for accountId {accountId}: {lastRecipe}")
             return lastRecipe
         except Exception as e:
             print(f"Error in findLastRecipeByAccountId: {str(e)}")
             raise
 
-    def save(self, userRecipeId):
-        userRecipeId.save()  # UserRecipeId 객체 저장
-        return userRecipeId
+    def save(self, userRecipe):
+        user_recipe_obj = UserRecipe(account_id=userRecipe['account_id'], recipe_hash=userRecipe['recipe_hash'])
+        user_recipe_obj.save()  # UserRecipe 객체 저장
+        return user_recipe_obj
 
-    def findByAccountIdAndRecipeId(self, accountId, userRecipeId):
-        return UserRecipe.objects.get(account_id=accountId, user_recipe_id=userRecipeId)
+    def findByAccountIdAndRecipeHash(self, accountId, recipeHash):
+        return UserRecipe.objects.filter(account_id=accountId, recipe_hash=recipeHash).first()
 
-    def deleteByAccountIdAndRecipeId(self, accountId, userRecipeId):
-        return UserRecipe.objects.filter(account_id=accountId, user_recipe_id=userRecipeId).delete()
+    def deleteByAccountIdAndRecipeHash(self, accountId, recipeHash):  # recipeHash로 삭제
+        return UserRecipe.objects.filter(account_id=accountId, recipe_hash=recipeHash).delete()

@@ -272,21 +272,21 @@ class GoogleOauthView(viewsets.ViewSet):
     def saveRecipeToRedis(self, request):
         try:
             account_id = request.data.get('accountId')
-            user_recipe_id = request.data.get('userRecipeId')
+            recipe_hash = request.data.get('recipeHash')  # recipeHash 사용
             recipe = request.data.get('recipe')
 
             # 로그로 데이터 확인
-            print(f"account_id: {account_id}, user_recipe_id: {user_recipe_id}, recipe: {recipe}")
+            print(f"account_id: {account_id}, recipe_hash: {recipe_hash}, recipe: {recipe}")
 
-            if not account_id or not user_recipe_id or not recipe:
-                return Response({"error": "account_id, user_recipe_id, and recipe are required"},
+            if not account_id or not recipe_hash or not recipe:
+                return Response({"error": "account_id, recipe_hash, and recipe are required"},
                                 status=status.HTTP_400_BAD_REQUEST)
 
             # Redis 키 구성
-            redis_key = f"account_id:{account_id}, recipe_id:{user_recipe_id}"
+            redis_key = f"account_id:{account_id}, recipe_hash:{recipe_hash}"  # recipeHash 사용
             redis_value = recipe
 
-            # Redis에 저장, 3일간 ttl
+            # Redis에 저장, 3일간 ttl (259200초 = 3일)
             self.redisService.store_with_ttl(redis_key, redis_value, 259200)
 
             return Response({"message": "Recipe successfully saved to Redis"}, status=status.HTTP_201_CREATED)

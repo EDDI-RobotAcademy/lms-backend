@@ -1,6 +1,6 @@
 from user_recipe.repository.user_recipe_repository_impl import UserRecipeRepositoryImpl
 from user_recipe.service.user_recipe_service import UserRecipeService
-from user_recipe.entity.user_recipe import UserRecipe
+
 
 class UserRecipeServiceImpl(UserRecipeService):
     __instance = None
@@ -8,7 +8,6 @@ class UserRecipeServiceImpl(UserRecipeService):
     def __new__(cls):
         if cls.__instance is None:
             cls.__instance = super().__new__(cls)
-            cls.__instance.__repository = UserRecipeRepositoryImpl.getInstance()
         return cls.__instance
 
     @classmethod
@@ -17,24 +16,26 @@ class UserRecipeServiceImpl(UserRecipeService):
             cls.__instance = cls()
         return cls.__instance
 
-    def createUserRecipe(self, accountId):
-        try:
-            lastRecipe = self.__instance.__repository.findLastRecipeByAccountId(accountId)
-            if lastRecipe:
-                userRecipeId = lastRecipe.user_recipe_id + 1
-            else:
-                userRecipeId = 1
+    def createUserRecipe(self, account_id: int, recipe_hash: str):
+        repository = UserRecipeRepositoryImpl.getInstance()
 
-            print(f"Generated userRecipeId: {userRecipeId} for accountId: {accountId}")
+        # 중복 확인
+        existing_recipe = repository.findByAccountIdAndRecipeHash(account_id, recipe_hash)
+        if existing_recipe:
+            print(f"Recipe already exists for account_id {account_id} and recipe_hash {recipe_hash}")
+            return None  # 중복된 레시피가 있으면 저장하지 않음
 
-            userRecipeIdInstance = UserRecipe(account_id=accountId, user_recipe_id=userRecipeId)
-            return self.__instance.__repository.save(userRecipeIdInstance)
-        except Exception as e:
-            print(f"Error in createUserRecipe: {str(e)}")
-            raise
+        # 새로운 레시피 저장
+        new_recipe = repository.save({
+            "account_id": account_id,
+            "recipe_hash": recipe_hash
+        })
+        return new_recipe
 
-    def getUserRecipe(self, accountId, userRecipeId):
-        return self.__repository.findByAccountIdAndRecipeId(accountId, userRecipeId)
+    def getUserRecipeByAccountIdAndRecipeHash(self, account_id: int, recipe_hash: str):
+        repository = UserRecipeRepositoryImpl.getInstance()
+        return repository.findByAccountIdAndRecipeHash(account_id, recipe_hash)
 
-    def deleteUserRecipe(self, accountId, userRecipeId):
-        return self.__repository.deleteByAccountIdAndRecipeId(accountId, userRecipeId)
+    def deleteUserRecipeByAccountIdAndRecipeHash(self, account_id: int, recipe_hash: str):
+        repository = UserRecipeRepositoryImpl.getInstance()
+        return repository.deleteByAccountIdAndRecipeHash(account_id, recipe_hash)
