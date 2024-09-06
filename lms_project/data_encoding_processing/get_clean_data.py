@@ -6,7 +6,6 @@ import numpy as np
 from tqdm import tqdm
 import requests
 import json
-import numpy as np
 from bs4 import BeautifulSoup
 
 
@@ -94,7 +93,6 @@ def get_pickle_data(file_path, n):
 
     # 레시피 명이 결측값인 건 사용할 수 없으므로 삭제
     df = df.dropna(subset='CKG_NM')
-    # 필요한 컬럼 : [레시피제목(RCP_TTL), 레시피명(CKG_NM), 요리 난이도(CKG_DODF_NM), 요리인분(CKG_INBUN_NM), 주재료(CKG_MTRL_CN), 레시피 상세 내용(), 레시피 카테고리(CKG_KND_ACTO_NM, CKG_MTH_ACTO_NM,CKG_STA_ACTO_NM) ]
     clean_df = df[
         ['RCP_TTL', 'CKG_NM', 'CKG_INBUN_NM', 'CKG_MTRL_CN', 'CKG_DODF_NM', 'CKG_KND_ACTO_NM', 'CKG_MTH_ACTO_NM',
          'CKG_STA_ACTO_NM']].dropna()
@@ -135,13 +133,13 @@ def clean_ingredients(df):
 
 
 def remove_stopwords(df):
-    stopwords = ['-', '_', '꾹꾹', '@6845925', '/'
-                                             '^', '~', '!', 'ㅎ', 'ㅋ', 'ㅌ', '【', ':)',
+    stopwords = ['-', '_', '꾹꾹', '@6845925', '/', '^~^',
+                 '^', '^^', '~', '!', 'ㅎ', 'ㅋ', 'ㅌ', '【', ':)',
                  '...', '..', '*', '♡', '♥', '☆', '★', '♬', '♪', 'ㅠ', 'ㅜ', 'ㅡ', '[', ']']
 
     stopwords_pattern = '|'.join(re.escape(word) for word in stopwords)
-    zero_width_space_pattern_1 = r'\u200b'
-    zero_width_space_pattern_2 = r'\xa0'
+    zero_width_space_pattern_1 = u'\u200b'
+    zero_width_space_pattern_2 = u'\xa0'
 
     df['RCP_CONTENT'] = df['RCP_CONTENT'].str.replace(zero_width_space_pattern_1, '', regex=True) \
         .str.replace(zero_width_space_pattern_2, '', regex=True) \
@@ -154,26 +152,22 @@ def remove_stopwords(df):
     print(df.info())
     return df
 
-
 def preprocess_data(path):
     df = load_data(path)
     df = clean_servings(df)
     df = clean_ingredients(df)
     df = remove_stopwords(df)
-    # df = adjust_servings_in_dataframe(df)
 
     os.makedirs('result', exist_ok=True)
 
     df.to_pickle(f'result/preprocessed_df_{df.shape[0]}.pkl')
-    # print(f"\n*** All processing is finished. Saved at 'result/preprocessed_df_{df.shape[0]}.pkl'.")
-
-    return f"\n*** All processing is finished. Saved at 'result/preprocessed_df_{df.shape[0]}.pkl'."
-
+    print(f"\n*** All processing is finished. Saved at 'result/preprocessed_df_{df.shape[0]}.pkl'.")
 
 if __name__ == '__main__':
     file_paths = ['TB_RECIPE_SEARCH-220701.csv', 'TB_RECIPE_SEARCH-20231130.csv']
     file_path = os.path.join('data', file_paths[0])
-    result = get_pickle_data(file_path, 30000)  # 크롤링 데이터 개수
+    result = get_pickle_data(file_path, 1000)  # 크롤링 데이터 개수
 
     # preprocess
     preprocess_data(result)
+
