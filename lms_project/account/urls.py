@@ -29,4 +29,7 @@ urlpatterns = [
     path('account-create-time',
          AccountView.as_view({'post': 'getAccountCreateTime'}),
          name='account-set-profile-img'),
+    path('send-password-reset-email',
+         AccountView.as_view({'post': 'sendResetEmail'}),
+         name='account-send-password-reset-email'),
 ]
