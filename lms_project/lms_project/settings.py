@@ -63,6 +63,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
+
 # CORS 설정 옵션
 CORS_ALLOW_CREDENTIALS = True
 
@@ -174,5 +175,19 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# SMTP 서버 설정
+EMAIL_HOST = 'smtp.gmail.com'  # Gmail을 사용하는 경우
+EMAIL_PORT = 587  # TLS 포트
+EMAIL_USE_TLS = True
+
+# 발신 이메일 계정 정보 (환경 변수에서 가져옴)
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# 기본 발신자 이메일
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

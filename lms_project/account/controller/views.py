@@ -1,5 +1,10 @@
 import bcrypt
-
+import random
+import string
+from django.conf import settings
+from django.core.mail import send_mail
+from django.utils import timezone
+from datetime import timedelta
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from account.serializers import ProfileSerializer
@@ -173,3 +178,56 @@ class AccountView(viewsets.ViewSet):
         except Exception as e:
             print("getCreateTime 중 에러 발생:", e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def sendResetEmail(self, request):
+        try:
+            email = request.data.get("email")
+            if not email:
+                return Response({"error": "이메일 주소를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # 이메일 주소가 유효한지 확인
+            account = self.accountService.findAccountByEmail(email)
+            if not account:  # account가 False일 때
+                return Response({"error": "등록되지 않은 이메일 주소입니다."}, status=status.HTTP_404_NOT_FOUND)
+
+            # 5글자 재설정 코드 생성
+            reset_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+
+            # 코드 만료 시간 설정 (예: 1시간 후)
+            code_expiry = timezone.now() + timedelta(hours=1)
+
+            # 계정에 코드와 만료 시간 저장
+            account.reset_password_code = reset_code
+            account.reset_password_code_expiry = code_expiry
+            account.save()
+
+            # 이메일 내용 작성
+            email_subject = "비밀번호 재설정 요청"
+            email_message = f"""
+            안녕하세요,
+
+            비밀번호 재설정 요청을 받았습니다. 아래의 코드를 입력하여 새 비밀번호를 설정해 주세요:
+
+            재설정 코드: {reset_code}
+
+            이 코드는 1시간 동안 유효합니다.
+
+            만약 비밀번호 재설정을 요청하지 않으셨다면, 이 이메일을 무시해 주세요.
+
+            감사합니다.
+            """
+
+            # 이메일 전송
+            send_mail(
+                email_subject,
+                email_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False,
+            )
+
+            return Response({"message": "비밀번호 재설정 이메일을 발송했습니다."}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print("비밀번호 재설정 이메일 발송 중 오류 발생:", e)
+            return Response({"error": "이메일 발송 중 오류가 발생했습니다."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
