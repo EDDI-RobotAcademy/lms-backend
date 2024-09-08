@@ -195,11 +195,23 @@ class AccountView(viewsets.ViewSet):
             if not account:
                 return Response({"error": "등록되지 않은 이메일 주소입니다."}, status=status.HTTP_404_NOT_FOUND)
 
-            reset_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+            # 대문자, 소문자, 숫자, 특수문자를 각각 최소 1개 이상 포함
+            uppercase = random.choice(string.ascii_uppercase)
+            lowercase = random.choice(string.ascii_lowercase)
+            digit = random.choice(string.digits)
+            special = random.choice('!@#$%^&*')
 
+            # 나머지 4자리는 모든 문자 중에서 랜덤 선택
+            remaining = ''.join(
+                random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits + '!@#$%^&*', k=4))
+
+            # 모든 문자를 합치고 섞기
+            password = uppercase + lowercase + digit + special + remaining
+            password_list = list(password)
+            random.shuffle(password_list)
+            reset_code = ''.join(password_list)
             hashed_password = bcrypt.hashpw(reset_code.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
             success = self.accountService.changePassword(email, hashed_password)
-
             email_subject = "비밀번호 재설정 요청"
             email_message = f"""
                안녕하세요,
