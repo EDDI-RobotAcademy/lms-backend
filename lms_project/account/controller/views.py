@@ -182,38 +182,30 @@ class AccountView(viewsets.ViewSet):
     def sendResetEmail(self, request):
         try:
             email = request.data.get("email")
+            print("이메일 출력", email)
             if not email:
                 return Response({"error": "이메일 주소를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
-            # 이메일 주소가 유효한지 확인
             account = self.accountService.findAccountByEmail(email)
-            if not account:  # account가 False일 때
+            print("어카운트 출력", account)
+            if not account:
                 return Response({"error": "등록되지 않은 이메일 주소입니다."}, status=status.HTTP_404_NOT_FOUND)
 
-            # 5글자 재설정 코드 생성
             reset_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 
-            # 코드 만료 시간 설정 (예: 1시간 후)
-            code_expiry = timezone.now() + timedelta(hours=1)
+            hashed_password = bcrypt.hashpw(reset_code.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+            success = self.accountService.changePassword(email, hashed_password)
+            print("성공 여부 출력", success)
 
-            # 계정에 코드와 만료 시간 저장
-            account.reset_password_code = reset_code
-            account.reset_password_code_expiry = code_expiry
-            account.save()
-
-            # 이메일 내용 작성
             email_subject = "비밀번호 재설정 요청"
             email_message = f"""
             안녕하세요,
 
-            비밀번호 재설정 요청을 받았습니다. 아래의 코드를 입력하여 새 비밀번호를 설정해 주세요:
+            비밀번호가 재설정 되었습니다.
 
-            재설정 코드: {reset_code}
-
-            이 코드는 1시간 동안 유효합니다.
-
-            만약 비밀번호 재설정을 요청하지 않으셨다면, 이 이메일을 무시해 주세요.
-
+            재설정된 비밀번호: {reset_code}
+            입니다.
+            
             감사합니다.
             """
 
@@ -226,7 +218,12 @@ class AccountView(viewsets.ViewSet):
                 fail_silently=False,
             )
 
-            return Response({"message": "비밀번호 재설정 이메일을 발송했습니다."}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "success": success
+                },
+                status=status.HTTP_200_OK,
+            )
 
         except Exception as e:
             print("비밀번호 재설정 이메일 발송 중 오류 발생:", e)
