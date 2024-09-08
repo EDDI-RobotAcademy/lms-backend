@@ -2,16 +2,14 @@ import bcrypt
 import random
 import string
 from django.conf import settings
-from django.core.mail import send_mail
-from django.utils import timezone
-from datetime import timedelta
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from account.serializers import ProfileSerializer
 from account.service.account_service_impl import AccountServiceImpl
 
 from google_oauth.service.redis_service_impl import RedisServiceImpl
-
+import threading
+from django.core.mail import send_mail
 
 class AccountView(viewsets.ViewSet):
     accountService = AccountServiceImpl.getInstance()
@@ -179,15 +177,21 @@ class AccountView(viewsets.ViewSet):
             print("getCreateTime 중 에러 발생:", e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+    @staticmethod
+    def send_mail_async(subject, message, from_email, recipient_list):
+        threading.Thread(
+            target=send_mail,
+            args=(subject, message, from_email, recipient_list),
+            kwargs={'fail_silently': False}
+        ).start()
+
     def sendResetEmail(self, request):
         try:
             email = request.data.get("email")
-            print("이메일 출력", email)
             if not email:
                 return Response({"error": "이메일 주소를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
             account = self.accountService.findAccountByEmail(email)
-            print("어카운트 출력", account)
             if not account:
                 return Response({"error": "등록되지 않은 이메일 주소입니다."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -195,36 +199,35 @@ class AccountView(viewsets.ViewSet):
 
             hashed_password = bcrypt.hashpw(reset_code.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
             success = self.accountService.changePassword(email, hashed_password)
-            print("성공 여부 출력", success)
 
             email_subject = "비밀번호 재설정 요청"
             email_message = f"""
-            안녕하세요,
+               안녕하세요,
 
-            비밀번호가 재설정 되었습니다.
+               비밀번호가 재설정 되었습니다.
 
-            재설정된 비밀번호: {reset_code}
-            입니다.
-            
-            감사합니다.
-            """
+               재설정된 비밀번호: {reset_code}
+               입니다.
 
-            # 이메일 전송
-            send_mail(
+               감사합니다.
+               """
+
+            # 비동기적으로 이메일 전송
+            self.send_mail_async(
                 email_subject,
                 email_message,
                 settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
+                [email]
             )
 
             return Response(
                 {
-                    "success": success
+                    "success": success,
+                    "message": "비밀번호 재설정 이메일이 발송되었습니다."
                 },
                 status=status.HTTP_200_OK,
             )
 
         except Exception as e:
-            print("비밀번호 재설정 이메일 발송 중 오류 발생:", e)
-            return Response({"error": "이메일 발송 중 오류가 발생했습니다."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            print(f"비밀번호 재설정 처리 중 오류 발생: {e}")
+            return Response({"error": "비밀번호 재설정 처리 중 오류가 발생했습니다."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
