@@ -4,7 +4,8 @@ from account.entity.account import Account
 
 
 class UserRecipe(models.Model):
-    account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account_id = models.IntegerField(null=False) #TODO. account table의 accountId 값을 참조하는 테이블이어야 함
+    # models.ForeignKey(Account, on_delete=models.CASCADE)
     recipe_hash = models.CharField(max_length=64, null=False)  # SHA-256 해시값
 
     class Meta:
