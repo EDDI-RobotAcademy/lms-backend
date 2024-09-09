@@ -4,13 +4,17 @@ from abc import ABC, abstractmethod
 class UserRecipeService(ABC):
 
     @abstractmethod
-    def createUserRecipe(self, account_id: int, recipe_hash: str):
+    def createUserRecipe(self, account_id, recipe_hash):
         pass
 
     @abstractmethod
-    def getUserRecipeByAccountIdAndRecipeHash(self, account_id: int, recipe_hash: str):
+    def getHashedRecipeByAccountId(self, account_id):
         pass
 
     @abstractmethod
-    def deleteUserRecipeByAccountIdAndRecipeHash(self, account_id: int, recipe_hash: str):
+    def getRecipeFromMongDB(self, account_id, recipe_hash):
+        pass
+
+    @abstractmethod
+    def deleteUserRecipeByAccountIdAndRecipeHash(self, account_id, recipe_hash):
         pass

@@ -10,7 +10,15 @@ class UserRecipeRepository(ABC):
         pass
 
     @abstractmethod
-    def findByAccountIdAndRecipeHash(self, accountId, recipeHash):  # recipeHash로 조회
+    def checkDuplicationHashedRecipe(self, account_id, recipe_hash):
+        pass
+
+    @abstractmethod
+    def findHashedRecipeByAccountId(self, accountId):
+        pass
+
+    @abstractmethod
+    def findRecipeFromMongoDB(self, account_id, recipe_hash):
         pass
 
     @abstractmethod
