@@ -25,4 +25,6 @@ urlpatterns = [
     path('redis-add-attendancecherry',GoogleOauthView.as_view({'post': 'addAttendanceCherry'}),name='redis-add-attendancecherry'),
     path('redis-get-account-id', GoogleOauthView.as_view({'post': 'getAccountIdFromUserToken'}), name='redis-get-account-id'),
     path('save-recipe-to-redis', GoogleOauthView.as_view({'post': 'saveRecipeToRedis'}), name='save-recipe-to-redis'),
+    path('save-recipe-hash', GoogleOauthView.as_view({'post': 'saveRecipeHashToRedis'}), name='save_recipe_hash'),
+    path('get-recipe-hashes', GoogleOauthView.as_view({'post': 'getRecipeHashesFromRedis'}), name='get_recipe_hashes'),
 ]

@@ -294,4 +294,48 @@ class GoogleOauthView(viewsets.ViewSet):
             print(f"Error saving recipe to Redis: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def saveRecipeHashToRedis(self, request):
+        try:
+            account_id = request.data.get('accountId')
+            recipe_hash = request.data.get('recipeHash')  # recipeHash 사용
+
+            # 로그로 데이터 확인
+            print(f"account_id: {account_id}, recipe_hash: {recipe_hash}")
+
+            if not account_id or not recipe_hash:
+                return Response({"error": "account_id and recipe_hash are required"},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            # Redis에 저장, 원하는시간 숫자로 ttl 설정 -> 28일
+            self.redisService.store_with_ttl(account_id, recipe_hash, 2419200)
+
+            return Response({"message": "Recipe hash successfully saved to Redis"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(f"Error saving recipe hash to Redis: {e}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def getRecipeHashesFromRedis(self, request):
+        try:
+            account_id = request.data.get('accountId')
+            print(f"account_id: {account_id}")
+
+            if not account_id:
+                return Response({"error": "account_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+            # Redis에서 해당 account_id로 저장된 recipe_hash 리스트 가져오기
+            recipe_hashes = self.redisService.get_recipe_hashes(account_id)
+
+            if not recipe_hashes or len(recipe_hashes) == 0:
+                return Response({"message": "No recipe hashes found for this account"},
+                                status=status.HTTP_404_NOT_FOUND)
+
+            return Response({"recipe_hashes": recipe_hashes}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error retrieving recipe hashes from Redis: {e}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
 
