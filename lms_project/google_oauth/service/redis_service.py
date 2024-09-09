@@ -32,3 +32,5 @@ class RedisService(ABC):
     @abstractmethod
     def store_with_ttl(self, key, value, ttl):
         pass
+    def get_recipe_hashes(self, key):
+        pass

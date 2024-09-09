@@ -144,3 +144,41 @@ class RedisServiceImpl(RedisService):
         except Exception as e:
             print(f"Error storing value in Redis with TTL: {e}")
             raise e
+
+    def get_recipe_hashes(self, key):
+        """ Redis에서 account_id로 저장된 해시, 리스트 또는 문자열 값을 반환 """
+        try:
+            # Redis에서 key의 타입 확인
+            temp = self.redis_client.type(key)
+            temp = self.redis_client.getall(key)
+            print(temp)
+            recipe_hashes_dict = self.redis_client.get(key)
+            print(recipe_hashes_dict)
+            return recipe_hashes_dict
+            # if key_type == 'hash':
+            #     # 해시 타입일 경우
+            #     recipe_hashes_dict = self.redis_client.hgetall(key)
+            #     print(recipe_hashes_dict)
+            #     recipe_hashes_list = list(recipe_hashes_dict.values())
+            #
+            # elif key_type == 'list':
+            #     # 리스트 타입일 경우
+            #     recipe_hashes_list = self.redis_client.lrange(key, 0, -1)
+            #     print(recipe_hashes_list)
+            #
+            # elif key_type == 'string':
+            #     # 문자열 타입일 경우
+            #     recipe_hashes_list = [self.redis_client.get(key)]
+            #     # 문자열을 리스트로 감싸서 반환
+            #
+            # else:
+            #     # 다른 타입일 경우 오류 처리
+            #     raise TypeError(f"Unsupported Redis key type: {key_type}")
+
+            # return recipe_hashes_list
+        except Exception as e:
+            print(f"Error retrieving recipe hashes from Redis: {e}")
+            raise e
+
+
+
