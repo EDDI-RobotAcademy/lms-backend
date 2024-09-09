@@ -14,7 +14,7 @@ class UserRecipeRepository(ABC):
         pass
 
     @abstractmethod
-    def findHashedRecipeByAccountId(self, accountId):
+    def findHashedRecipeByAccountId(self, account_id):
         pass
 
     @abstractmethod
@@ -22,5 +22,5 @@ class UserRecipeRepository(ABC):
         pass
 
     @abstractmethod
-    def deleteByAccountIdAndRecipeHash(self, accountId, recipeHash):  # recipeHash로 삭제
+    def deleteByAccountIdAndRecipeHash(self, account_id, recipeHash):  # recipeHash로 삭제
         pass

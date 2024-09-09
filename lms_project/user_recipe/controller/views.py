@@ -19,7 +19,7 @@ class UserRecipeViewSet(viewsets.ViewSet):
         recipe = self.userRecipeService.getHashedRecipeByAccountId(account_id)
 
         if recipe:
-            return Response({"recipe": recipe}, status=status.HTTP_200_OK)
+            return Response({"message": recipe}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "레시피가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
 

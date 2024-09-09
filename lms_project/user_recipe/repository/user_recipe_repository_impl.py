@@ -33,15 +33,15 @@ class UserRecipeRepositoryImpl(UserRecipeRepository):
     def checkDuplicationHashedRecipe(self, account_id, recipe_hash):
         return UserRecipe.objects.filter(account_id=account_id, recipe_hash=recipe_hash)
 
-    def findHashedRecipeByAccountId(self, accountId):
-        # userRecipe = UserRecipe.objects.get(account_id=accountId)
+    def findHashedRecipeByAccountId(self, account_id):
+        # userRecipe = UserRecipe.objects.get(account_id=account_id)
         # return userRecipe.recipe_hash
-        userRecipes = UserRecipe.objects.filter(account_id=accountId)
+        userRecipes = UserRecipe.objects.filter(account_id=account_id)
         # 여러 개의 recipe_hash 한 번에
         return [recipe.recipe_hash for recipe in userRecipes]
 
     def findRecipeFromMongoDB(self, account_id, recipe_hash):
         print('구현 예정')
 
-    def deleteByAccountIdAndRecipeHash(self, accountId, recipeHash):  # recipeHash로 삭제
-        return UserRecipe.objects.filter(account_id=accountId, recipe_hash=recipeHash).delete()
+    def deleteByAccountIdAndRecipeHash(self, account_id, recipeHash):  # recipeHash로 삭제
+        return UserRecipe.objects.filter(account_id=account_id, recipe_hash=recipeHash).delete()
