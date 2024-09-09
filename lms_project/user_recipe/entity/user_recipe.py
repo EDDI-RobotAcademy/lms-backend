@@ -1,7 +1,10 @@
 from django.db import models
 
+from account.entity.account import Account
+
+
 class UserRecipe(models.Model):
-    account_id = models.IntegerField(null=False)
+    account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
     recipe_hash = models.CharField(max_length=64, null=False)  # SHA-256 해시값
 
     class Meta:
