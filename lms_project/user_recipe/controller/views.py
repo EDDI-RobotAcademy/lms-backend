@@ -9,11 +9,10 @@ class UserRecipeViewSet(viewsets.ViewSet):
         recipe_hash = request.data.get('recipeHash')
 
         result = self.userRecipeService.createUserRecipe(account_id, recipe_hash)
-
         if result:
             return Response({"message": "레시피 저장 완료"}, status=status.HTTP_201_CREATED)
         else:
-            return Response({"message": "중복된 레시피입니다."}, status=status.HTTP_409_CONFLICT)
+            return Response({"message": "중복된 레시피입니다."}, status=status.HTTP_200_OK)
 
     def findRecipe(self, request, pk=None):
         account_id = request.data.get('accountId')
