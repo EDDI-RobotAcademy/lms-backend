@@ -287,7 +287,7 @@ class GoogleOauthView(viewsets.ViewSet):
             redis_value = recipe
 
             # Redis에 저장, 3일간 ttl (259200초 = 3일)
-            self.redisService.store_with_ttl(redis_key, redis_value, 259200)
+            self.redisService.store_with_ttl(redis_key, redis_value, 604800)
 
             return Response({"message": "Recipe successfully saved to Redis"}, status=status.HTTP_201_CREATED)
         except Exception as e:
