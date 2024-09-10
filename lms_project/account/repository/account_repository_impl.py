@@ -53,9 +53,10 @@ class AccountRepositoryImpl(AccountRepository):
 
     def findTicket(self, accountId):
         account = AccountTicket.objects.get(id=accountId)
-        print("findTicket 출력", account.Ticket)
-        if account.Ticket:
-            return account.Ticket  # 대문자 T를 사용
+        if account.Ticket is None:
+            print("accont.Ticket이 None임")
+        else:
+            return account.Ticket
 
     def updateTicket(self, user_id, new_ticket_count):
         try:
@@ -70,9 +71,10 @@ class AccountRepositoryImpl(AccountRepository):
 
     def findCherry(self, accountId):
         account = AccountCherry.objects.get(id=accountId)
-        print("findCherry 출력", account.Cherry)
-        if account.Cherry:
-            return account.Cherry  # 대문자 T를 사용
+        if account.Cherry is None:
+            print("accont.Cherry None임")
+        else:
+            return account.Cherry
 
     def findAttendance_Cherry(self, accountId):
         account = AccountAttendanceCheck.objects.get(id=accountId)
