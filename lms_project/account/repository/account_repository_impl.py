@@ -77,8 +77,8 @@ class AccountRepositoryImpl(AccountRepository):
             return account.Cherry
 
     def findAttendance_Cherry(self, accountId):
-        account = AccountAttendanceCheck.objects.get(id=accountId)
-        return account.Attendance_cherry
+        account = AccountCherry.objects.get(id=accountId)
+        return account.Cherry
 
     def findAttendance_Date(self, accountId):
         account = AccountAttendanceCheck.objects.get(id=accountId)
@@ -102,8 +102,8 @@ class AccountRepositoryImpl(AccountRepository):
         try:
             account = Account.objects.get(id=account_id)
             print(f"updateAttendanceCherry -> account: {account}")
-            attCherry = account.AttendanceCheck
-            attCherry.Attendance_cherry = new_attendanceCherry
+            attCherry = account.Cherry
+            attCherry.Cherry = new_attendanceCherry
             print("지금까지 출석으로 얻은 체리", new_attendanceCherry)
             attCherry.save()
             return True
