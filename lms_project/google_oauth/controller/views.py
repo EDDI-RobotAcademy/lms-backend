@@ -147,11 +147,15 @@ class GoogleOauthView(viewsets.ViewSet):
             purchaseTicket = request.data.get('ticket')
             account_id = accountInfo['account_id']
 
-            self.accountService.updateTicketCount(account_id, purchaseTicket)
+            ticket = self.accountService.findTicketByAccountId(account_id)
 
-            accountInfo['ticket'] = purchaseTicket
+            new_ticket_count = ticket + purchaseTicket
+
+            self.accountService.updateTicketCount(account_id, new_ticket_count)
+
+            accountInfo['ticket'] = new_ticket_count
             self.redisService.update_access_token(user_token, accountInfo)
-            return Response({'ticket': purchaseTicket}, status=status.HTTP_200_OK)
+            return Response({'ticket': new_ticket_count}, status=status.HTTP_200_OK)
         except Exception as e:
             print(f"Error purchase ticket: {e}")
             return False, str(e)
@@ -222,9 +226,9 @@ class GoogleOauthView(viewsets.ViewSet):
             "total_amount": amount,
             "vat_amount": 200,
             "tax_free_amount": 0,
-            "approval_url": "http://localhost:8080/kakao_oauth/kakao-approve",
-            "fail_url": "http://localhost:8080",
-            "cancel_url": "http://localhost:8080",
+            "approval_url": "http://54.180.92.79/kakao_oauth/kakao-approve",
+            "fail_url": "http://54.180.92.79",
+            "cancel_url": "http://54.180.92.79",
         }
         response = requests.post(url, params=params, headers=headers)
         return JsonResponse(response.json())
