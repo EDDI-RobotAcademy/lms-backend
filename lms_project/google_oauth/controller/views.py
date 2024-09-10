@@ -108,7 +108,7 @@ class GoogleOauthView(viewsets.ViewSet):
 
             ticket = self.accountService.findTicketByAccountId(account_id)
             if ticket <= 0:
-                return Response({'error': str("티켓이 없습니다!")}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'ticket': 0}, status=status.HTTP_200_OK)
 
             new_ticket_count = ticket - 1
             self.accountService.updateTicketCount(account_id, new_ticket_count)
