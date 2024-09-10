@@ -107,8 +107,8 @@ class RedisServiceImpl(RedisService):
 
     def update_attendance_cherry_count(self, user_token, accountInfo):
         try:
-            attendance_cherry = accountInfo['cherry']
-            self.redis_client.hset(user_token, 'cherry', attendance_cherry)
+            attendance_cherry = accountInfo['attendance_cherry']
+            self.redis_client.hset(user_token, 'attendance_cherry', attendance_cherry)
             return True
 
         except Exception as e:

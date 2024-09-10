@@ -54,8 +54,10 @@ class AttendanceView(viewsets.ViewSet):
             print(f"attendance cherry: {attendanceCherry}")
             attendanceCherry += 50
             accountInfo['cherry']= attendanceCherry
-
+            cherry = self.accountService.findCherryByAccountId(accountId)
+            new_cherry_count = cherry + attendanceCherry
             self.accountService.updateAttendanceCherry(accountId, attendanceCherry)
+            self.accountService.updateCherryCount(accountId, new_cherry_count)
             self.redisService.update_cherry_count(user_token, accountInfo)
             return Response({'attendanceDateList': attendanceCherry}, status=status.HTTP_200_OK)
 
