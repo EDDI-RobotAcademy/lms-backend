@@ -1,7 +1,7 @@
 from django.db import models
 
 class AccountCherry(models.Model):
-    Cherry = models.IntegerField(default=99999)
+    Cherry = models.IntegerField(default=0)
 
     def __str__(self):
         return self.Cherry
