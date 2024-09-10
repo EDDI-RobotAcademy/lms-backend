@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
             name='AccountCherry',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('Cherry', models.IntegerField(default=99999)),
+                ('Cherry', models.IntegerField(default=0)),
             ],
             options={
                 'db_table': 'account_cherry',
@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
             name='AccountTicket',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('Ticket', models.IntegerField(default=99999)),
+                ('Ticket', models.IntegerField(default=0)),
             ],
             options={
                 'db_table': 'account_ticket',

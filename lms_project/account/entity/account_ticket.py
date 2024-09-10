@@ -1,7 +1,7 @@
 from django.db import models
 
 class AccountTicket(models.Model):
-    Ticket = models.IntegerField(default=99999)
+    Ticket = models.IntegerField(default=0)
 
     def __str__(self):
         return self.Ticket
