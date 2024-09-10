@@ -53,8 +53,10 @@ class AttendanceView(viewsets.ViewSet):
             attendanceCherry = self.accountService.findAttendance_CherryByAccountId(accountId)
             print(f"attendance cherry: {attendanceCherry}")
             attendanceCherry += 50
+            accountInfo['cherry']= attendanceCherry
 
             self.accountService.updateAttendanceCherry(accountId, attendanceCherry)
+            self.redisService.update_cherry_count(user_token, accountInfo)
             return Response({'attendanceDateList': attendanceCherry}, status=status.HTTP_200_OK)
 
         except Exception as e:

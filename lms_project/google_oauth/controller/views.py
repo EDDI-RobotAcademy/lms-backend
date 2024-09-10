@@ -108,7 +108,7 @@ class GoogleOauthView(viewsets.ViewSet):
 
             ticket = self.accountService.findTicketByAccountId(account_id)
             if ticket <= 0:
-                return False, "No tickets available"
+                return Response({'error': str("티켓이 없습니다!")}, status=status.HTTP_400_BAD_REQUEST)
 
             new_ticket_count = ticket - 1
             self.accountService.updateTicketCount(account_id, new_ticket_count)
@@ -118,7 +118,7 @@ class GoogleOauthView(viewsets.ViewSet):
             return Response({'ticket': ticket}, status=status.HTTP_200_OK)
         except Exception as e:
             print(f"Error using ticket: {e}")
-            return False, str(e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def getUserCherryInfo(self, request):
         try:
