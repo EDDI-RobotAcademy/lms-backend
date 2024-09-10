@@ -226,9 +226,9 @@ class GoogleOauthView(viewsets.ViewSet):
             "total_amount": amount,
             "vat_amount": 200,
             "tax_free_amount": 0,
-            "approval_url": "http://localhost:8080/kakao_oauth/kakao-approve",
-            "fail_url": "http://localhost:8080",
-            "cancel_url": "http://localhost:8080",
+            "approval_url": "http://54.180.92.79/kakao_oauth/kakao-approve",
+            "fail_url": "http://54.180.92.79",
+            "cancel_url": "http://54.180.92.79",
         }
         response = requests.post(url, params=params, headers=headers)
         return JsonResponse(response.json())
