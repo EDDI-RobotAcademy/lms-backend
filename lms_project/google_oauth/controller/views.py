@@ -147,16 +147,11 @@ class GoogleOauthView(viewsets.ViewSet):
             purchaseTicket = request.data.get('ticket')
             account_id = accountInfo['account_id']
 
-            ticket = self.accountService.findTicketByAccountId(account_id)
-            if ticket <= 0:
-                return False, "티켓 없음"
+            self.accountService.updateTicketCount(account_id, purchaseTicket)
 
-            new_ticket_count = ticket + purchaseTicket
-            self.accountService.updateTicketCount(account_id, new_ticket_count)
-
-            accountInfo['ticket'] = new_ticket_count
+            accountInfo['ticket'] = purchaseTicket
             self.redisService.update_access_token(user_token, accountInfo)
-            return Response({'ticket': ticket}, status=status.HTTP_200_OK)
+            return Response({'ticket': purchaseTicket}, status=status.HTTP_200_OK)
         except Exception as e:
             print(f"Error purchase ticket: {e}")
             return False, str(e)
